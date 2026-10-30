@@ -668,6 +668,9 @@ html[data-theme="tokyo"]{--bg-editor:#1a1b26;--bg-side:#16161e;--bg-activity:#16
 .remin{width:100%;background:var(--input);color:var(--fg-bright);border:1px solid transparent;border-radius:2px;padding:5px 7px;font:inherit;outline:0;user-select:text;height:28px}
 .remin:focus{border-color:var(--accent)}
 .rtw{display:inline-block;width:12px;text-align:center;flex:0 0 auto}
+#devpage pre{background:var(--bg-editor);border:1px solid var(--border);border-radius:6px;padding:10px 12px;overflow:auto;font:13px/1.5 "Cascadia Code",Consolas,"Courier New",monospace;user-select:text;margin:6px 0 10px}
+#devpage a:not(.lk){color:var(--accent)}
+#devpage ol{margin:0 0 4px 20px;padding:0;line-height:1.7;font-size:13.5px}
 </style>
 </head>
 <body>
@@ -1993,7 +1996,8 @@ const MENUS=[
  ["Go",[["Go to File...","Ctrl+P","quickopen"],["Go to Line...","Ctrl+G","gotoline"],["Go to Symbol in Editor...","Ctrl+Shift+O","gotosymbol"],["Go to Matching Bracket","Ctrl+Shift+\\","gotobracket"],null,["Next Editor","Alt+PageDown","nexttab"],["Previous Editor","Alt+PageUp","prevtab"]]],
  ["Run",[["Run Code","F5","run"],["Compile Only","","compile"],["Go Live (HTML)","","golive"],["Stop Live Server","","stoplive"],["Open Live in Browser Tab","","livetab"],null,["Judge0 Settings...","","settings"]]],
  ["Terminal",[["New Terminal","Ctrl+Shift+`","newterm"],["Clear Terminal","","clearterm"],null,["Run Active File","","run"]]],
- ["Help",[["Show All Commands","F1","palette"],["Release Notes","","releasenotes"],["Keyboard Shortcuts","","shortcuts"],["About Developer","","aboutdev"],["About CodePulse","","about"]]]
+ ["Help",[["Show All Commands","F1","palette"],["Release Notes","","releasenotes"],["Keyboard Shortcuts","","shortcuts"],["About Developer","","aboutdev"],["About CodePulse","","about"]]],
+ ["More",[["Explore LinkForge","","linkforge"]]]
 ];
 
 function openAbout(){
@@ -2438,6 +2442,41 @@ function openRelease(){
   d.classList.add("show"); d.focus();
 }
 ACT.releasenotes=openRelease;
+const LF_URL="https://abhinavmaurya12.github.io/LinkForge/", LF_REPO="https://github.com/abhinavmaurya12/LinkForge";
+function openLinkForge(){
+  let d=document.getElementById("devpage"); if(d&&d.dataset.k!=="lf"){d.remove();d=null}
+  if(!d){
+    d=document.createElement("div"); d.id="devpage"; d.dataset.k="lf"; d.tabIndex=-1;
+    const A=(u,t,c)=>`<a class="lk ${c||""}" href="${u}" target="_blank" rel="noopener noreferrer">${t}</a>`, L=(u,t)=>`<a href="${u}" target="_blank" rel="noopener noreferrer">${t}</a>`, ul=a=>"<ul>"+a.map(x=>"<li>"+x+"</li>").join("")+"</ul>";
+    d.innerHTML=`<div class="dbar"><b>Explore LinkForge</b><span class="sp"></span><button class="vbtn sec2" id="devClose">✕ Close</button></div>
+<div class="wrap">
+ <div class="hero"><div class="av">🔗</div><div>
+  <h1>LinkForge — All My Projects in One Place</h1><div class="sub">Discover. Explore. Launch. 🚀</div>
+  <div class="links">${A(LF_URL,"🌐 Open LinkForge","pri")}${A(LF_REPO,"GitHub — LinkForge")}</div>
+ </div></div>
+ <div class="card"><p>LinkForge is a personal project showcase designed to bring all my live websites and GitHub projects together in one convenient place. Instead of searching through multiple repositories, visitors can explore my projects and open their live demos from a central hub.</p></div>
+ <div class="card"><h2>🌐 Project Links</h2>${ul(["Repository: "+L(LF_REPO,"GitHub — LinkForge"),"Live Website: "+L(LF_URL,"Open LinkForge")])}</div>
+ <div class="card"><h2>✨ About the Project</h2><p>LinkForge serves as a central directory for my web development projects, making it easier to discover and access websites I've built and deployed.</p>
+  <h3>🎯 Goals</h3>${ul(["🔗 Bring all project live URLs together in one place.","🚀 Make it easy to launch and explore individual projects.","💻 Showcase my web development work.","📂 Provide a central starting point for exploring my GitHub portfolio.","🌱 Continuously add new projects as I build and deploy them."])}</div>
+ <div class="grid">
+  <div class="card"><h2>🛠️ Built With</h2>${ul(["HTML","Git and GitHub","GitHub Pages for hosting, if enabled for this repository"])}</div>
+  <div class="card"><h2>📂 Repository Structure</h2><pre>LinkForge/
+└── index.html</pre></div>
+ </div>
+ <div class="card"><h2>🚀 Getting Started</h2><h3>View Online</h3><p>Open the ${L(LF_URL,"LinkForge website")} to explore the project.</p>
+  <h3>Run Locally</h3><ol><li>Clone the repository:<pre>git clone ${LF_REPO}.git</pre></li><li>Open the project folder:<pre>cd LinkForge</pre></li><li>Open <b>index.html</b> in your browser.</li></ol></div>
+ <div class="card"><h2>🔮 Future Improvements</h2>${ul(["Add search and category filters for projects.","Display project descriptions and technology tags.","Add project preview images and live-demo buttons.","Include GitHub repository and source-code links.","Create responsive layouts for mobile, tablet, and desktop.","Add sorting options for recently updated projects.","Introduce dark and light themes."])}</div>
+ <div class="card"><h2>👨‍💻 Developer</h2><p><b>Abhinav Maurya</b></p>${ul(["GitHub: "+L("https://github.com/abhinavmaurya12","@abhinavmaurya12"),"LeetCode: "+L("https://leetcode.com/u/abhinavmau/","abhinavmau")])}</div>
+ <div class="card"><h2>📄 License</h2><p>This project is available for learning and personal portfolio use. Add a <b>LICENSE</b> file to the repository if you want to specify formal reuse and distribution terms.</p></div>
+ <div class="card"><p>⭐ Enjoying LinkForge? Explore my projects, check out the repositories, and follow my development journey!</p><div class="links">${A(LF_URL,"🚀 Launch LinkForge","pri")}</div><p style="margin:12px 0 0;color:var(--fg-muted)"><i>LinkForge — Every project, one destination.</i></p></div>
+</div>`;
+    document.body.appendChild(d);
+    d.querySelector("#devClose").onclick=()=>d.classList.remove("show");
+    d.addEventListener("keydown",e=>{ e.stopPropagation(); if(e.key==="Escape") d.classList.remove("show") });
+  }
+  d.classList.add("show"); d.focus();
+}
+Object.assign(ACT,{linkforge:openLinkForge,linkforgeweb:()=>{ if(!window.open(LF_URL,"_blank","noopener")) toast("Allow pop-ups to open LinkForge") }});
 defCmd("diff","Source Control: Open Changes (Diff vs HEAD)","",diffActive);
 MENUS.forEach(([n,items])=>items.forEach(it=>{if(it)defCmd(it[2],`${n}: ${it[0].replace(/\.\.\.$/,"")}`,it[1],ACT[it[2]])}));
 defCmd("clearout","Output: Clear Output","",ACT.clearout);
