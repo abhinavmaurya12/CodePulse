@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light">
+<html lang="en" data-theme="monokai">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
 <title>CodePulse – Modern editor with live previews</title>
-<meta name="theme-color" content="#ffffff">
+<meta name="theme-color" content="#1a1b17">
 <meta name="application-name" content="CodePulse">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
@@ -365,6 +365,8 @@ kbd{background:rgba(128,128,128,.25);border-radius:3px;padding:1px 6px;font:12px
 .dlg .row{display:flex;justify-content:flex-end;gap:8px;margin-top:16px}
 #ctx{position:fixed;display:none;background:var(--menu);border:1px solid var(--border);border-radius:5px;box-shadow:0 6px 20px rgba(0,0,0,.5);padding:4px 0;z-index:130;min-width:170px}
 #ctx button{display:block;width:calc(100% - 8px);margin:0 4px;background:none;border:0;padding:5px 18px;text-align:left;border-radius:4px;cursor:pointer}
+#ctx{overflow-y:auto;max-width:calc(100vw - 16px);box-sizing:border-box}
+#ctx button{white-space:nowrap}
 #ctx button:hover{background:var(--accent);color:#fff}
 #toast{position:fixed;right:14px;bottom:34px;background:var(--menu);border:1px solid var(--border);padding:8px 14px;border-radius:5px;box-shadow:0 4px 16px rgba(0,0,0,.4);z-index:200;display:none;font-size:12.5px}
 
@@ -378,6 +380,7 @@ html[data-theme="dracula"]{--bg-editor:#282a36;--bg-side:#21222c;--bg-activity:#
 #themeBtn:hover{background:rgba(128,128,128,.35)}
 #installBtn{display:flex;align-items:center;gap:5px;height:22px;margin-right:8px;padding:0 11px;border-radius:11px;border:0;background:var(--accent);color:#fff;cursor:pointer;font-size:12px;font-weight:600;white-space:nowrap}
 #installBtn:hover{filter:brightness(1.15)}
+#mInstall{display:none}
 .tbi{width:26px;height:22px;margin-right:2px;display:flex;align-items:center;justify-content:center;background:none;border:0;border-radius:4px;color:inherit;cursor:pointer;opacity:.85}
 .tbi:hover{background:rgba(128,128,128,.3);opacity:1}
 .tbi svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.1;stroke-linejoin:round}
@@ -443,8 +446,10 @@ html.nostatus #status{display:none}
   .tab .tx{opacity:1 !important;width:26px;height:26px;font-size:18px}
   #files li{height:36px}
   .iconbtn{width:34px;height:34px}
-  #ctx button{padding:11px 18px}
+  #ctx button{padding:11px 18px;font-size:14px;-webkit-tap-highlight-color:transparent}
   #ctx{min-width:200px}
+  #ctx button:hover{background:none;color:inherit}
+  #ctx button:active{background:var(--accent);color:#fff}
   .vbtn{padding:10px 14px}
   html.kb #xkeys{display:flex}
 }
@@ -455,6 +460,9 @@ html.nostatus #status{display:none}
   #menuToggle{display:flex}
   #menubar{display:none;position:fixed;top:calc(var(--tbh) + env(safe-area-inset-top,0px));left:0;right:0;flex-direction:column;height:auto;max-height:calc(var(--vvh,100dvh) - var(--tbh) - 30px);overflow-y:auto;background:var(--menu);border-bottom:1px solid var(--border);box-shadow:0 8px 20px rgba(0,0,0,.4);z-index:90}
   #menubar.mopen{display:flex}
+  #mInstall{display:flex;align-items:center;gap:8px;width:100%;height:46px;flex:0 0 auto;padding:0 16px;border:0;background:var(--accent);color:#fff;font-size:14px;font-weight:600;text-align:left;cursor:pointer}
+  #mInstall:active{filter:brightness(1.2)}
+  .menu+#mInstall{margin-top:6px}
   .menu{height:auto}
   .menu>button{width:100%;height:44px;padding:0 16px;display:flex;align-items:center;justify-content:space-between;text-align:left;font-size:14px}
   .menu>button::after{content:"›";opacity:.6;transition:transform .15s}
@@ -631,9 +639,9 @@ html[data-theme="tokyo"]{--bg-editor:#1a1b26;--bg-side:#16161e;--bg-activity:#16
   <!-- title bar -->
   <div id="titlebar">
     <div class="logo"><svg class="cp-logo" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lgT" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2aa1ff"/><stop offset="1" stop-color="#2ecc8f"/></linearGradient></defs><rect x="2" y="2" width="60" height="60" rx="15" fill="url(#lgT)"/><path d="M23 20L11 32l12 12" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/><path d="M41 20l12 12-12 12" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/><path d="M25 33h4l3-9 5 18 3-9h3" fill="none" stroke="#0b3d5c" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    <div class="brand"><span class="bn">CodePulse</span><span class="vtag">vr.1.4.0</span></div>
+    <div class="brand"><span class="bn">CodePulse</span><span class="vtag">vr.1.5.0</span></div>
     <button id="menuToggle" title="Menu" aria-label="Menu"><svg viewBox="0 0 16 16"><path d="M2 4h12M2 8h12M2 12h12"/></svg></button>
-    <div id="menubar"></div>
+    <div id="menubar"><button id="mInstall" type="button" title="Install CodePulse as an app">⬇ <span>Install CodePulse app</span></button></div>
     <button id="wtitle" data-cmd="quickopen" title="Go to File (Ctrl+P)"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.8" cy="6.8" r="4.3"/><path d="M10 10l4 4"/></svg><span id="wtitleTxt">CodePulse</span></button>
     <div id="tbright"><button id="installBtn" title="Install CodePulse as an app">⬇ <span>Install CodePulse app</span></button><button class="tbi" id="tbSide" data-cmd="togglesidebar" title="Toggle Primary Side Bar (Ctrl+B)"><svg viewBox="0 0 16 16"><path class="fillp" d="M2 4a1.5 1.5 0 0 1 1.5-1.5H6v11H3.5A1.5 1.5 0 0 1 2 12z"/><rect x="1.5" y="2.5" width="13" height="11" rx="1.5"/><path d="M6 2.5v11"/></svg></button><button class="tbi" id="tbPanel" data-cmd="togglepanel" title="Toggle Panel (Ctrl+J)"><svg viewBox="0 0 16 16"><path class="fillp" d="M2 9.5h12V12a1.5 1.5 0 0 1-1.5 1.5h-9A1.5 1.5 0 0 1 2 12z"/><rect x="1.5" y="2.5" width="13" height="11" rx="1.5"/><path d="M1.5 9.5h13"/></svg></button><button id="themeBtn" data-cmd="toggletheme" title="Toggle Day / Night"></button></div>
   </div>
@@ -725,7 +733,7 @@ html[data-theme="tokyo"]{--bg-editor:#1a1b26;--bg-side:#16161e;--bg-activity:#16
         <div id="ac"></div>
         <div id="welcome">
           <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lgW" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2aa1ff"/><stop offset="1" stop-color="#2ecc8f"/></linearGradient></defs><rect x="2" y="2" width="60" height="60" rx="15" fill="url(#lgW)"/><path d="M23 20L11 32l12 12" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/><path d="M41 20l12 12-12 12" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/><path d="M25 33h4l3-9 5 18 3-9h3" fill="none" stroke="#0b3d5c" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <div class="big">CodePulse<span class="wvr">vr.1.4.0</span></div>
+          <div class="big">CodePulse<span class="wvr">vr.1.5.0</span></div>
           <div style="font-size:15px;margin-top:-8px;color:var(--fg-muted)">Modern editor with live previews</div>
           <div class="pcnote"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M2 20h20M9 16v4M15 16v4"/></svg>Use Laptop / PC for the coding</div>
           <table>
@@ -774,7 +782,7 @@ html[data-theme="tokyo"]{--bg-editor:#1a1b26;--bg-side:#16161e;--bg-activity:#16
     <div class="it">Spaces: 4</div>
     <div class="it">UTF-8</div>
     <div class="it">LF</div>
-    <div class="it" title="CodePulse version">vr.1.4.0</div>
+    <div class="it" title="CodePulse version">vr.1.5.0</div>
     <div class="it" id="sbLang" title="Judge0 language">{ } Java</div>
     <div class="it" data-cmd="settings" title="Judge0 Settings">⚡ Judge0</div>
     <div class="it" id="sbLive" data-cmd="golivetoggle" style="display:none" title="Go Live">📡 Go Live</div>
@@ -1282,7 +1290,10 @@ function dialog({title,body,inputs,ok="OK",cancel="Cancel",extra}){
 }
 function showCtx(x,y,items){
   const c=$("#ctx"); c.innerHTML=""; items.forEach(([l,fn])=>{const b=document.createElement("button");b.textContent=l;b.onclick=()=>{c.style.display="none";fn()};c.appendChild(b)});
-  c.style.display="block"; c.style.left=Math.min(x,innerWidth-190)+"px"; c.style.top=Math.min(y,innerHeight-items.length*28-10)+"px";
+  const vh=(window.visualViewport?visualViewport.height:innerHeight), vw=innerWidth, m=8;
+  c.style.display="block"; c.style.left="0px"; c.style.top="0px"; c.style.maxHeight=(vh-2*m)+"px";
+  const w=c.offsetWidth, h=c.offsetHeight;
+  c.style.left=Math.max(m,Math.min(x,vw-w-m))+"px"; c.style.top=Math.max(m,Math.min(y,vh-h-m))+"px";
 }
 document.addEventListener("click",()=>{$("#ctx").style.display="none"});
 
@@ -1872,11 +1883,11 @@ function selectAll(){ta.focus();ta.select()}
 const ICON_SUN='<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><circle cx="8" cy="8" r="3"/><path d="M8 1.5v1.6M8 12.9v1.6M1.5 8h1.6M12.9 8h1.6M3.4 3.4l1.1 1.1M11.5 11.5l1.1 1.1M3.4 12.6l1.1-1.1M11.5 4.5l1.1-1.1"/></svg>';
 const ICON_MOON='<svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><path d="M13.5 9.6A5.7 5.7 0 0 1 6.4 2.5a5.7 5.7 0 1 0 7.1 7.1z"/></svg>';
 function setTheme(t){
-  root.setAttribute("data-theme",t); store.set("js_theme_v2",t); if(t!=="light") store.set("js_dark",t);
+  root.setAttribute("data-theme",t); store.set("js_theme_v3",t); if(t!=="light") store.set("js_dark",t);
   const b=$("#themeBtn"); if(b){const light=t==="light"; b.innerHTML=(light?ICON_MOON:ICON_SUN)+`<span>${light?"Night":"Day"}</span>`; b.title=light?"Switch to Night mode":"Switch to Day mode"}
   scheduleMM();
 }
-function toggleTheme(){setTheme(root.getAttribute("data-theme")==="light"?store.get("js_dark","dark"):"light")}
+function toggleTheme(){setTheme(root.getAttribute("data-theme")==="light"?store.get("js_dark","monokai"):"light")}
 const MENUS=[
  ["File",[["New File","Alt+N","newfile"],["Open File...","","openfile"],["Open Folder...","","openfolder"],["Close Folder","","closefolder"],null,["Save","Ctrl+S","save"],["Save All","","saveall"],["Auto Save","","autosave"],["Download File","","download"],null,["Close Editor","Alt+W","closetab"],["Close Other Editors","","closeothers"],["Close All Editors","","closeall"],["Reopen Closed Editor","Alt+Shift+T","reopen"]]],
  ["Edit",[["Undo","Ctrl+Z","undo"],["Redo","Ctrl+Y","redo"],null,["Cut","Ctrl+X","cut"],["Copy","Ctrl+C","copy"],["Paste","Ctrl+V","paste"],null,["Select All","Ctrl+A","selectall"],["Toggle Line Comment","Ctrl+/","comment"],["Insert Date & Time","","datetime"],null,["Find","Ctrl+F","find"],["Replace","Ctrl+H","replace"],["Go to Line...","Ctrl+G","gotoline"],null,["Move Line Up","Alt+↑","moveup"],["Move Line Down","Alt+↓","movedown"],["Copy Line Up","Shift+Alt+↑","copyup"],["Copy Line Down","Shift+Alt+↓","copydown"],["Delete Line","Ctrl+Shift+K","deleteline"],["Select Line","","selectline"],["Format Document","Shift+Alt+F","format"],null,["Select Next Occurrence","Ctrl+D","selectnext"],["Toggle Block Comment","Shift+Alt+A","blockcomment"],["Join Lines","","joinlines"],["Sort Lines Ascending","","sortasc"],["Sort Lines Descending","","sortdesc"],["Trim Trailing Whitespace","","trimws"],null,["Transform to Uppercase","","upper"],["Transform to Lowercase","","lower"],["Transform to Title Case","","title"]]],
@@ -1896,7 +1907,7 @@ function openAbout(){
     d.innerHTML='<div class="dbar"><b>About CodePulse</b><span class="sp"></span><button class="vbtn sec2" id="devClose">✕ Close</button></div>'+
 '<div class="wrap">'+
  '<div class="hero"><div class="av" style="background:linear-gradient(135deg,#2aa1ff,#2ecc8f)"><svg viewBox="0 0 64 64" width="52" height="52" aria-hidden="true"><path d="M23 20L11 32l12 12M41 20l12 12-12 12" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M25 33h4l3-9 5 18 3-9h3" fill="none" stroke="#0b3d5c" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div>'+
-  '<h1>CodePulse</h1><div class="sub">Modern editor with live previews · vr.1.4.0</div>'+
+  '<h1>CodePulse</h1><div class="sub">Modern editor with live previews · vr.1.5.0</div>'+
   '<div class="links"><a class="lk pri" href="#" id="abDev">👨‍💻 About Developer</a><a class="lk" href="https://github.com/abhinavmaurya12" target="_blank" rel="noopener noreferrer">GitHub</a></div></div></div>'+
  '<div class="card"><h2>🚀 What is CodePulse?</h2><p>CodePulse is a VS Code–style code editor that runs entirely in your browser — nothing to install and no sign-in needed (an optional local profile is available in the Account view). Write, run and preview <b>HTML, CSS, JavaScript, Java, Python, C and C++</b> code on a laptop, tablet or phone, and install it as an app (PWA) for quick access. Your files, folders, settings and theme are stored locally in your browser.</p></div>'+
  '<div class="grid">'+
@@ -1913,9 +1924,10 @@ function openAbout(){
  '</div>'+
  '<div class="card"><h2>⌨️ Handy shortcuts</h2><table>'+key("Command Palette","Ctrl+Shift+P")+key("Go to File","Ctrl+P")+key("Run","F5")+key("Find / Replace","Ctrl+F / H").replace("</kbd> + <kbd>H","</kbd> / <kbd>H")+key("Toggle Sidebar","Ctrl+B")+key("Toggle Panel","Ctrl+J")+key("Source Control","Ctrl+Shift+G")+key("New Terminal","Ctrl+`")+key("New File","Alt+N")+key("Zen Mode","Alt+Shift+Z")+'</table><p style="margin-top:8px">See <b>Help → Keyboard Shortcuts</b> for the full list.</p></div>'+
  '<div class="card"><h2>🛠️ Built with</h2><ul>'+li(["<b>HTML</b>, <b>CSS</b> and <b>JavaScript</b>","<b>Java server</b> — Java, Python, C and C++ code is compiled and run on <b>Judge0 CE</b>","<b>SQLite</b> in the browser by <b>sql.js</b>","<b>Service Worker (sw)</b> and a web app manifest for the installable app","<b>Shortcut</b> and <b>APK / app install</b> — install CodePulse from the browser (PWA) with the Install button"])+'</ul></div>'+
- '<div class="card"><h2>🆕 What’s new in vr.1.4.0</h2><ul>'+li(["Run <b>Python, C and C++</b> code on Judge0, together with Java (HTML, CSS and JavaScript run in the live preview)","Syntax colors, snippets, comment toggle and error markers for Python, C and C++","Terminal commands: <b>python</b>, <b>gcc</b> and <b>g++</b>","Language logo for <b>PHP</b> files"])+'</ul></div>'+
+ '<div class="card"><h2>🆕 What’s new in vr.1.5.0</h2><ul>'+li(["<b>Monokai</b> is now the default color theme","Manage (gear) menu and other pop-up menus now fit properly on phones and small screens","Day / Night toggle switches between Light and Monokai"])+'</ul></div>'+
+ '<div class="card"><h2>vr.1.4.0</h2><ul>'+li(["Run <b>Python, C and C++</b> code on Judge0, together with Java (HTML, CSS and JavaScript run in the live preview)","Syntax colors, snippets, comment toggle and error markers for Python, C and C++","Terminal commands: <b>python</b>, <b>gcc</b> and <b>g++</b>","Language logo for <b>PHP</b> files"])+'</ul></div>'+
  '<div class="card"><h2>vr.1.3.0</h2><ul>'+li(["<b>Account</b> section in the side bar (name, role, photo, email)","<b>Extensions</b>, <b>Testing</b> and a <b>Manage</b> menu, like VS Code","<b>Go Live</b> button for HTML files","Language logos for HTML, CSS, JavaScript, Java, Python, C and C++","5 new color themes and 14 new built-in extensions","VS Code-style tab close buttons"])+'</ul></div>'+
- '<div class="card"><h2>Version</h2><p>CodePulse <b>vr.1.4.0</b> — Modern editor with live previews. Created by Abhinav Maurya.</p></div>'+
+ '<div class="card"><h2>Version</h2><p>CodePulse <b>vr.1.5.0</b> — Modern editor with live previews. Created by Abhinav Maurya.</p></div>'+
 '</div>';
     document.body.appendChild(d);
     d.querySelector("#devClose").onclick=()=>d.classList.remove("show");
@@ -2083,6 +2095,7 @@ MENUS.forEach(([n,items])=>{
   m.innerHTML=`<button>${n}</button><div class="drop">${items.map(it=>it?`<button data-a="${it[2]}">${esc(it[0])}<span>${esc(it[1])}</span></button>`:"<hr>").join("")}</div>`;
   mb.appendChild(m);
 });
+{ const mI=$("#mInstall"); if(mI) mb.appendChild(mI) } /* keep the mobile Install button after the last menu (Help) */
 document.addEventListener("click",e=>{
   const mn=e.target.closest(".menu"); $$(".menu").forEach(m=>{if(m!==mn)m.classList.remove("open")});
   const b=e.target.closest("[data-a]"); if(b){$$(".menu").forEach(m=>m.classList.remove("open"));ACT[b.dataset.a]&&ACT[b.dataset.a]();return}
@@ -2140,7 +2153,7 @@ dragger($("#rzPanel"),e=>{const ea=$("#editorArea"),r=ea.getBoundingClientRect()
   else {const h=Math.min(Math.max(r.bottom-e.clientY,60),r.height-140);pn.style.flexBasis=h+"px"}});
 
 /* ================= init ================= */
-setTheme(store.get("js_theme_v2","light"));
+setTheme(store.get("js_theme_v3","monokai"));
 /* phones: the sidebar is an overlay, so start with it closed (it was covering the editor) */
 /* explorer / side bar starts closed on every screen size */
 $("#sidebar").classList.add("hidden"); $$(".ab[data-view]").forEach(b=>b.classList.remove("active"));
@@ -2158,16 +2171,19 @@ $("#panel").classList.add("hidden"); $("#rzPanel").style.display="none";
 })();
 /* ---- install (PWA) ---- */
 (function(){
-  const ib=$("#installBtn"); let dp=null;
+  const ib=$("#installBtn"), mi=$("#mInstall"); let dp=null;
+  const hideAll=()=>{ ib.style.display="none"; if(mi) mi.style.setProperty("display","none","important") };
   const standalone=matchMedia("(display-mode: standalone)").matches||navigator.standalone;
-  if(standalone){ ib.style.display="none"; return }
+  if(standalone){ hideAll(); return }
   window.addEventListener("beforeinstallprompt",e=>{ e.preventDefault(); dp=e });
-  window.addEventListener("appinstalled",()=>{ dp=null; ib.style.display="none"; toast("CodePulse installed") });
-  ib.addEventListener("click",async()=>{
+  window.addEventListener("appinstalled",()=>{ dp=null; hideAll(); toast("CodePulse installed") });
+  const doInstall=async()=>{
     if(dp){ dp.prompt(); await dp.userChoice; dp=null; return }
     if(/iphone|ipad|ipod/i.test(navigator.userAgent)) toast("Tap Share, then Add to Home Screen to install");
     else toast("Use your browser menu, then Install app");
-  });
+  };
+  ib.addEventListener("click",doInstall);
+  if(mi) mi.addEventListener("click",()=>{ $("#menubar").classList.remove("mopen"); doInstall() });
 })();
 /* explorer sections + "..." menu */
 $$("#v-explorer .sec").forEach(h=>h.addEventListener("click",e=>{ if(e.target.closest(".iconbtn")) return; h.classList.toggle("collapsed") }));
@@ -2638,7 +2654,7 @@ $("#testRef").addEventListener("click",()=>{renderTest();toast("Tests refreshed"
 /* ---- Manage (gear) menu ---- */
 ACT.manage=function(){
   const r=$("#manageBtn").getBoundingClientRect();
-  showCtx(r.right+4,r.top-8,[["Command Palette…",()=>openQP(">")],["Extensions",()=>showView("extensions")],["Keyboard Shortcuts",()=>ACT.shortcuts()],["Color Theme…",()=>ACT.colortheme()],["Toggle Day / Night",()=>toggleTheme()],["Toggle Zen Mode",()=>toggleZen()],["Judge0 Settings…",()=>judgeSettings()],["About CodePulse",()=>openAbout()]]);
+  showCtx(r.right+4,innerWidth<=700?r.bottom:r.top-8,[["Command Palette…",()=>openQP(">")],["Extensions",()=>showView("extensions")],["Keyboard Shortcuts",()=>ACT.shortcuts()],["Color Theme…",()=>ACT.colortheme()],["Toggle Day / Night",()=>toggleTheme()],["Toggle Zen Mode",()=>toggleZen()],["Judge0 Settings…",()=>judgeSettings()],["About CodePulse",()=>openAbout()]]);
 };
 document.addEventListener("keydown",e=>{ if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==="x"){ e.preventDefault(); showView("extensions") } });
 /* ---- account (optional profile: name, role, photo, email) ---- */
