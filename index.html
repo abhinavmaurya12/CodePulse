@@ -631,6 +631,43 @@ html[data-theme="tokyo"]{--bg-editor:#1a1b26;--bg-side:#16161e;--bg-activity:#16
 #pvPane .pvbar .iconbtn{font-size:15px;width:28px;height:28px}
 #pvFrame{flex:1;min-height:0;border:0;width:100%;background:#fff}
 @media (max-width:760px){#pvPane{position:absolute;inset:0;z-index:50;min-width:0;flex-basis:auto}}
+#find input.err{border-color:#f14c4c}
+#diffpage{position:fixed;inset:0;z-index:9000;background:var(--bg-editor);display:none;flex-direction:column}
+#diffpage.show{display:flex}
+#diffpage .dbar{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--bg-title);border-bottom:1px solid var(--border);color:var(--fg-bright);font-size:13px}
+#diffpage .dbar .sp{flex:1}
+#diffbody{flex:1;overflow:auto;user-select:text;font:13px/20px "Cascadia Code",Consolas,"Courier New",monospace}
+#diffbody table{border-collapse:collapse;width:100%;table-layout:fixed}
+#diffbody td{white-space:pre;padding:0 8px;vertical-align:top;overflow:hidden;width:calc(50% - 22px);color:var(--fg)}
+#diffbody td.nn{width:44px;text-align:right;color:var(--gutter);background:var(--bg-side);padding:0 6px}
+#diffbody td.a{background:rgba(70,180,70,.25)}#diffbody td.d{background:rgba(255,0,0,.22)}
+#petBody{padding:10px 14px 18px;display:flex;flex-direction:column;gap:10px}
+.pstage{position:relative;height:170px;border:1px solid var(--border);border-radius:10px;background:linear-gradient(var(--bg-editor),var(--hover));display:flex;flex-direction:column;align-items:center;justify-content:flex-end;overflow:hidden;padding-bottom:18px}
+.pbub{position:absolute;top:10px;left:50%;transform:translateX(-50%);max-width:88%;background:var(--menu);border:1px solid var(--border);border-radius:10px;padding:4px 10px;font-size:12px;text-align:center;color:var(--fg-bright)}
+.pet{font-size:64px;line-height:1;cursor:pointer;user-select:none;animation:pbounce 1.4s ease-in-out infinite;transform-origin:bottom}
+.pet.happy{animation:pjump .7s ease-in-out infinite}
+.pet.sleep{animation:pbreath 3s ease-in-out infinite;filter:grayscale(.5)}
+.pet.sad,.pet.hungry{animation:pshake .6s ease-in-out infinite;filter:saturate(.4)}
+.pmood{position:absolute;right:26%;top:62px;font-size:22px}
+.pground{position:absolute;left:0;right:0;bottom:0;height:16px;background:rgba(128,128,128,.22)}
+@keyframes pbounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes pjump{0%,100%{transform:translateY(0) scale(1,.95)}50%{transform:translateY(-16px) scale(1,1.05)}}
+@keyframes pbreath{0%,100%{transform:scale(1)}50%{transform:scale(1.06,.94)}}
+@keyframes pshake{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.pname{display:flex;align-items:center;gap:8px;color:var(--fg-bright);font-weight:600;font-size:14px}
+.pname small{color:var(--fg-muted);font-weight:400;font-size:12px}
+.pbar{display:flex;align-items:center;gap:8px;font-size:12px}
+.pbar span{width:64px;color:var(--fg-muted)}
+.pbar i{flex:1;height:8px;border-radius:4px;background:rgba(128,128,128,.25);overflow:hidden}
+.pbar b{display:block;height:100%;border-radius:4px;transition:width .3s}
+.pkinds{display:flex;gap:4px;flex-wrap:wrap}
+.pkinds button{background:none;border:1px solid transparent;border-radius:6px;font-size:20px;padding:2px 6px;cursor:pointer}
+.pkinds button.on,.pkinds button:hover{border-color:var(--accent);background:var(--hover)}
+#status #sbRemote{order:-1;background:rgba(0,0,0,.3);margin:0 6px 0 -6px;font-weight:600}
+#status #sbRemote.on{background:#16825d}
+.remin{width:100%;background:var(--input);color:var(--fg-bright);border:1px solid transparent;border-radius:2px;padding:5px 7px;font:inherit;outline:0;user-select:text;height:28px}
+.remin:focus{border-color:var(--accent)}
+.rtw{display:inline-block;width:12px;text-align:center;flex:0 0 auto}
 </style>
 </head>
 <body>
@@ -639,7 +676,7 @@ html[data-theme="tokyo"]{--bg-editor:#1a1b26;--bg-side:#16161e;--bg-activity:#16
   <!-- title bar -->
   <div id="titlebar">
     <div class="logo"><svg class="cp-logo" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lgT" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2aa1ff"/><stop offset="1" stop-color="#2ecc8f"/></linearGradient></defs><rect x="2" y="2" width="60" height="60" rx="15" fill="url(#lgT)"/><path d="M23 20L11 32l12 12" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/><path d="M41 20l12 12-12 12" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/><path d="M25 33h4l3-9 5 18 3-9h3" fill="none" stroke="#0b3d5c" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
-    <div class="brand"><span class="bn">CodePulse</span><span class="vtag">vr.1.5.0</span></div>
+    <div class="brand"><span class="bn">CodePulse</span><span class="vtag">vr.1.6.0</span></div>
     <button id="menuToggle" title="Menu" aria-label="Menu"><svg viewBox="0 0 16 16"><path d="M2 4h12M2 8h12M2 12h12"/></svg></button>
     <div id="menubar"><button id="mInstall" type="button" title="Install CodePulse as an app">⬇ <span>Install CodePulse app</span></button></div>
     <button id="wtitle" data-cmd="quickopen" title="Go to File (Ctrl+P)"><svg viewBox="0 0 16 16" aria-hidden="true"><circle cx="6.8" cy="6.8" r="4.3"/><path d="M10 10l4 4"/></svg><span id="wtitleTxt">CodePulse</span></button>
@@ -658,6 +695,8 @@ html[data-theme="tokyo"]{--bg-editor:#1a1b26;--bg-side:#16161e;--bg-activity:#16
       <button class="ab" data-view="db" title="Database"><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5.5" rx="7" ry="2.8"/><path d="M5 5.5v13c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8v-13M5 12c0 1.5 3.1 2.8 7 2.8s7-1.3 7-2.8"/></svg></button>
       <button class="ab" data-view="svc" title="Services"><svg viewBox="0 0 24 24"><rect x="3.5" y="4" width="17" height="6" rx="1.5"/><rect x="3.5" y="14" width="17" height="6" rx="1.5"/><path d="M7 7h.01M7 17h.01M11 7h6M11 17h6"/></svg></button>
       <div class="sp"></div>
+      <button class="ab" data-view="remote" title="Remote Explorer"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M8 20h8M12 16v4M9.5 8l-2 2 2 2M14.5 8l2 2-2 2"/></svg></button>
+      <button class="ab" data-view="pet" title="Coding Pet"><svg viewBox="0 0 24 24"><circle cx="6.5" cy="10" r="2"/><circle cx="10" cy="6" r="2"/><circle cx="14.5" cy="6" r="2"/><circle cx="18" cy="10" r="2"/><path d="M12 12c-3 0-5.5 3-5.5 5.2 0 1.6 1.4 2.3 3 2 .9-.2 1.6-.4 2.5-.4s1.6.2 2.5.4c1.6.3 3-.4 3-2C17.5 15 15 12 12 12z"/></svg></button>
       <button class="ab" data-view="account" id="acctBtn" title="Account"><svg viewBox="0 0 24 24"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20.5c0-4 3.4-6.5 7.5-6.5s7.5 2.5 7.5 6.5"/></svg><img class="acav" id="acctBtnImg" alt=""><span class="acini" id="acctBtnIni"></span></button>
       <button class="ab" id="manageBtn" data-cmd="manage" title="Manage"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3.2"/><path d="M12 2.8v2.6M12 18.6v2.6M2.8 12h2.6M18.6 12h2.6M5.5 5.5l1.8 1.8M16.7 16.7l1.8 1.8M5.5 18.5l1.8-1.8M16.7 7.3l1.8-1.8"/></svg></button>
     </div>
@@ -673,7 +712,7 @@ html[data-theme="tokyo"]{--bg-editor:#1a1b26;--bg-side:#16161e;--bg-activity:#16
         <div class="sec collapsed" data-sec="outline"><span class="arrow"><svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg></span>Outline</div>
         <div class="secbody"><div id="outline"></div></div>
         <div class="sec collapsed" data-sec="timeline"><span class="arrow"><svg viewBox="0 0 16 16"><path d="M6 4l4 4-4 4"/></svg></span>Timeline</div>
-        <div class="secbody"><div class="oinfo">The active editor cannot provide timeline information.</div></div>
+        <div class="secbody"><div id="timeline"><div class="oinfo">The active editor cannot provide timeline information.</div></div></div>
       </div>
       <div class="panelview" id="v-search">
         <div class="sbhead">Search<span class="sp"></span>
@@ -701,7 +740,7 @@ html[data-theme="tokyo"]{--bg-editor:#1a1b26;--bg-side:#16161e;--bg-activity:#16
           <button class="vbtn sec2" data-cmd="settings">Judge0 Settings…</button>
         </div>
       </div>
-    <div class="panelview" id="v-git"><div class="sbhead">Source Control<span class="sp"></span><button class="iconbtn" id="gitCommitH" title="Commit (Ctrl+Enter)"><svg viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5"/></svg></button><button class="iconbtn" id="gitRef" title="Refresh"><svg viewBox="1 1 14 14"><path d="M13 8a5 5 0 1 1-1.6-3.7M13 2.5v3h-3"/></svg></button></div><div class="scm" id="gitTop"><textarea id="gitMsg" spellcheck="false" placeholder="Message (Ctrl+Enter to commit on &quot;main&quot;)"></textarea><button class="vbtn" id="gitCommit">✓ Commit</button></div><div id="gitBody"></div></div><div class="panelview" id="v-db"><div class="sbhead">Database<span class="sp"></span><button class="iconbtn" id="dbNew" title="New Query File (.sql)"><svg viewBox="1 1 14 14"><path d="M9.5 1.5H4A1.5 1.5 0 0 0 2.5 3v10A1.5 1.5 0 0 0 4 14.5h4M9.5 1.5l4 4V7M9.5 1.5v4h4M12 9.5v5M9.5 12h5"/></svg></button><button class="iconbtn" id="dbRef" title="Refresh"><svg viewBox="1 1 14 14"><path d="M13 8a5 5 0 1 1-1.6-3.7M13 2.5v3h-3"/></svg></button></div><div id="dbBody"></div></div><div class="panelview" id="v-svc"><div class="sbhead">Services<span class="sp"></span><button class="iconbtn" id="svcRef" title="Refresh"><svg viewBox="1 1 14 14"><path d="M13 8a5 5 0 1 1-1.6-3.7M13 2.5v3h-3"/></svg></button></div><div id="svcBody"></div></div><div class="panelview" id="v-extensions"><div class="sbhead">Extensions<span class="sp"></span><button class="iconbtn" id="extRef" title="Refresh"><svg viewBox="1 1 14 14"><path d="M13 8a5 5 0 1 1-1.6-3.7M13 2.5v3h-3"/></svg></button></div><div class="extsearch"><input id="extQ" placeholder="Search Extensions in Marketplace" spellcheck="false" autocomplete="off"></div><div id="extBody"></div></div><div class="panelview" id="v-testing"><div class="sbhead">Testing<span class="sp"></span><button class="iconbtn" id="testRef" title="Refresh Tests"><svg viewBox="1 1 14 14"><path d="M13 8a5 5 0 1 1-1.6-3.7M13 2.5v3h-3"/></svg></button></div><div id="testBody"></div></div><div class="panelview" id="v-account"><div class="sbhead">Account</div><div class="acct"><div class="acpic"><div class="acbig" id="acBig"></div><div class="btnrow"><button class="vbtn sec2" id="acPick">Add photo</button><button class="vbtn sec2" id="acRm" style="display:none">Remove</button></div><input type="file" id="acFile" accept="image/*" hidden></div><div class="acsum" id="acSum"></div><label for="acName">Name</label><input type="text" id="acName" placeholder="Your name" spellcheck="false" autocomplete="off" maxlength="60"><label for="acRole">Role</label><input type="text" id="acRole" placeholder="e.g. Student, Developer" spellcheck="false" autocomplete="off" maxlength="60"><label for="acMail">Email</label><input type="email" id="acMail" placeholder="you@example.com" spellcheck="false" autocomplete="off" maxlength="120"><div class="btnrow"><button class="vbtn" id="acSave">Save</button><button class="vbtn sec2" id="acClear">Clear all</button></div><div class="acnote">All fields are optional. Your details and photo are saved only in this browser (local storage) and are never uploaded.</div></div></div>
+    <div class="panelview" id="v-git"><div class="sbhead">Source Control<span class="sp"></span><button class="iconbtn" id="gitCommitH" title="Commit (Ctrl+Enter)"><svg viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5"/></svg></button><button class="iconbtn" id="gitRef" title="Refresh"><svg viewBox="1 1 14 14"><path d="M13 8a5 5 0 1 1-1.6-3.7M13 2.5v3h-3"/></svg></button></div><div class="scm" id="gitTop"><textarea id="gitMsg" spellcheck="false" placeholder="Message (Ctrl+Enter to commit on &quot;main&quot;)"></textarea><button class="vbtn" id="gitCommit">✓ Commit</button></div><div id="gitBody"></div></div><div class="panelview" id="v-db"><div class="sbhead">Database<span class="sp"></span><button class="iconbtn" id="dbNew" title="New Query File (.sql)"><svg viewBox="1 1 14 14"><path d="M9.5 1.5H4A1.5 1.5 0 0 0 2.5 3v10A1.5 1.5 0 0 0 4 14.5h4M9.5 1.5l4 4V7M9.5 1.5v4h4M12 9.5v5M9.5 12h5"/></svg></button><button class="iconbtn" id="dbRef" title="Refresh"><svg viewBox="1 1 14 14"><path d="M13 8a5 5 0 1 1-1.6-3.7M13 2.5v3h-3"/></svg></button></div><div id="dbBody"></div></div><div class="panelview" id="v-svc"><div class="sbhead">Services<span class="sp"></span><button class="iconbtn" id="svcRef" title="Refresh"><svg viewBox="1 1 14 14"><path d="M13 8a5 5 0 1 1-1.6-3.7M13 2.5v3h-3"/></svg></button></div><div id="svcBody"></div></div><div class="panelview" id="v-extensions"><div class="sbhead">Extensions<span class="sp"></span><button class="iconbtn" id="extRef" title="Refresh"><svg viewBox="1 1 14 14"><path d="M13 8a5 5 0 1 1-1.6-3.7M13 2.5v3h-3"/></svg></button></div><div class="extsearch"><input id="extQ" placeholder="Search Extensions in Marketplace" spellcheck="false" autocomplete="off"></div><div id="extBody"></div></div><div class="panelview" id="v-testing"><div class="sbhead">Testing<span class="sp"></span><button class="iconbtn" id="testRef" title="Refresh Tests"><svg viewBox="1 1 14 14"><path d="M13 8a5 5 0 1 1-1.6-3.7M13 2.5v3h-3"/></svg></button></div><div id="testBody"></div></div><div class="panelview" id="v-remote"><div class="sbhead">Remote Explorer<span class="sp"></span><button class="iconbtn" id="remRef" title="Refresh"><svg viewBox="1 1 14 14"><path d="M13 8a5 5 0 1 1-1.6-3.7M13 2.5v3h-3"/></svg></button></div><div id="remBody"></div></div><div class="panelview" id="v-pet"><div class="sbhead">Coding Pet</div><div id="petBody"></div></div><div class="panelview" id="v-account"><div class="sbhead">Account</div><div class="acct"><div class="acpic"><div class="acbig" id="acBig"></div><div class="btnrow"><button class="vbtn sec2" id="acPick">Add photo</button><button class="vbtn sec2" id="acRm" style="display:none">Remove</button></div><input type="file" id="acFile" accept="image/*" hidden></div><div class="acsum" id="acSum"></div><label for="acName">Name</label><input type="text" id="acName" placeholder="Your name" spellcheck="false" autocomplete="off" maxlength="60"><label for="acRole">Role</label><input type="text" id="acRole" placeholder="e.g. Student, Developer" spellcheck="false" autocomplete="off" maxlength="60"><label for="acMail">Email</label><input type="email" id="acMail" placeholder="you@example.com" spellcheck="false" autocomplete="off" maxlength="120"><div class="btnrow"><button class="vbtn" id="acSave">Save</button><button class="vbtn sec2" id="acClear">Clear all</button></div><div class="acnote">All fields are optional. Your details and photo are saved only in this browser (local storage) and are never uploaded.</div></div></div>
     </div>
     <div class="rz-v" id="rzSide"></div>
 
@@ -727,13 +766,13 @@ html[data-theme="tokyo"]{--bg-editor:#1a1b26;--bg-side:#16161e;--bg-activity:#16
         </div>
         <div id="minimap"><canvas id="mm"></canvas><div id="mmSlider"></div></div>
         <div id="find">
-          <div class="frow"><input id="fq" placeholder="Find" spellcheck="false"><button id="fCase" title="Match Case (Alt+C)">Aa</button><span id="fcount"></span><button id="fPrev" title="Previous (Shift+Enter)">↑</button><button id="fNext" title="Next (Enter)">↓</button><button id="fClose" title="Close (Esc)">✕</button></div>
+          <div class="frow"><input id="fq" placeholder="Find" spellcheck="false"><button id="fCase" title="Match Case (Alt+C)">Aa</button><button id="fWord" title="Match Whole Word (Alt+W)"><u>ab</u></button><button id="fRe" title="Use Regular Expression (Alt+R)">.*</button><span id="fcount"></span><button id="fPrev" title="Previous (Shift+Enter)">↑</button><button id="fNext" title="Next (Enter)">↓</button><button id="fClose" title="Close (Esc)">✕</button></div>
           <div class="frow" id="rrow" style="display:none"><input id="fr" placeholder="Replace" spellcheck="false"><button id="fRep" title="Replace (Enter)">Replace</button><button id="fRepAll" title="Replace All">All</button></div>
         </div>
         <div id="ac"></div>
         <div id="welcome">
           <svg class="wlogo" viewBox="0 0 64 64" aria-hidden="true"><defs><linearGradient id="lgW" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#2aa1ff"/><stop offset="1" stop-color="#2ecc8f"/></linearGradient></defs><rect x="2" y="2" width="60" height="60" rx="15" fill="url(#lgW)"/><path d="M23 20L11 32l12 12" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/><path d="M41 20l12 12-12 12" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" opacity=".95"/><path d="M25 33h4l3-9 5 18 3-9h3" fill="none" stroke="#0b3d5c" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <div class="big">CodePulse<span class="wvr">vr.1.5.0</span></div>
+          <div class="big">CodePulse<span class="wvr">vr.1.6.0</span></div>
           <div style="font-size:15px;margin-top:-8px;color:var(--fg-muted)">Modern editor with live previews</div>
           <div class="pcnote"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="1.5"/><path d="M2 20h20M9 16v4M15 16v4"/></svg>Use Laptop / PC for the coding</div>
           <table>
@@ -782,9 +821,10 @@ html[data-theme="tokyo"]{--bg-editor:#1a1b26;--bg-side:#16161e;--bg-activity:#16
     <div class="it">Spaces: 4</div>
     <div class="it">UTF-8</div>
     <div class="it">LF</div>
-    <div class="it" title="CodePulse version">vr.1.5.0</div>
+    <div class="it" title="CodePulse version">vr.1.6.0</div>
     <div class="it" id="sbLang" title="Judge0 language">{ } Java</div>
     <div class="it" data-cmd="settings" title="Judge0 Settings">⚡ Judge0</div>
+    <div class="it" id="sbRemote" data-cmd="v-remote" title="Remote Explorer"><span>⌬</span>&nbsp;<span id="sbRemoteT">Remote</span></div>
     <div class="it" id="sbLive" data-cmd="golivetoggle" style="display:none" title="Go Live">📡 Go Live</div>
   </div>
 </div>
@@ -860,11 +900,56 @@ const PY_KW=new Set("def class and or not in is None True False self cls".split(
 const C_CTRL=new Set("if else for while do switch case break continue return goto default try catch throw".split(" "));
 const C_KW=new Set("auto char const double enum extern float inline int long register restrict short signed sizeof static struct typedef union unsigned void volatile bool true false NULL nullptr class namespace using new delete template typename public private protected virtual override final this constexpr operator explicit friend mutable".split(" "));
 const TOK_PY=/(#[^\n]*)|(\x22\x22\x22[\s\S]*?(?:\x22\x22\x22|$)|\x27\x27\x27[\s\S]*?(?:\x27\x27\x27|$)|"(?:\\.|[^"\\\n])*"?|'(?:\\.|[^'\\\n])*'?)|(@[A-Za-z_]\w*)|(\b0[xX][0-9a-fA-F_]+\b|\b\d[\d_]*(?:\.\d+)?(?:[eE][+-]?\d+)?[jJ]?\b)|([A-Za-z_]\w*)|([\s\S])/g;
-function langOf(f){ const e=((f&&f.name||"").match(/\.([^.]+)$/)||[])[1]||""; const x=e.toLowerCase(); return x==="py"?"py":/^(c|h|cpp|cc|cxx|hpp)$/.test(x)?"c":"java" }
+const mkSet=s=>new Set(s.split(" "));
+const TOK_JS=/(\/\/[^\n]*|\/\*[\s\S]*?(?:\*\/|$))|(`(?:\\.|[^`\\])*`?|"(?:\\.|[^"\\\n])*"?|'(?:\\.|[^'\\\n])*'?)|(@[A-Za-z_]\w*)|(\b0[xX][0-9a-fA-F_]+\b|\b\d[\d_]*(?:\.\d+)?(?:[eE][+-]?\d+)?\b)|([A-Za-z_$][\w$]*)|([\s\S])/g;
+const TOK_SQL=/(--[^\n]*|\/\*[\s\S]*?(?:\*\/|$))|('(?:''|[^'])*'?|"[^"\n]*"?)|(@[A-Za-z_]\w*)|(\b\d+(?:\.\d+)?\b)|([A-Za-z_]\w*)|([\s\S])/g;
+const EXTL={
+ js:[TOK_JS,mkSet("if else for while do switch case break continue return try catch finally throw new default yield await async import export from as of in typeof instanceof delete void"),mkSet("function class const let var extends super this static get set true false null undefined NaN Infinity interface type enum implements public private protected readonly abstract")],
+ json:[TOK_JS,new Set(),mkSet("true false null")],
+ sql:[TOK_SQL,mkSet("select from where and or not in is null like between join left right inner outer full cross on group by order having limit offset insert into values update set delete create alter drop table view index database primary key foreign references default unique distinct as union all case when then else end exists asc desc if"),mkSet("int integer text varchar char real float double date datetime timestamp boolean blob numeric count sum avg min max autoincrement")]
+};
+const HT=/(<!--[\s\S]*?(?:-->|$)|<![A-Za-z][^>]*>?)|(<\/?[A-Za-z][\w:-]*)|(\/?>)|("[^"]*"?|'[^']*'?)|([A-Za-z_:@][\w:.-]*(?==))|(&#?\w+;)|([\s\S])/g;
+function hlTags(src){
+  let o="",m,inT=false; HT.lastIndex=0;
+  while((m=HT.exec(src))){
+    if(m[1]!==undefined) o+=`<span class="m">${esc(m[1])}</span>`;
+    else if(m[2]!==undefined){inT=true;o+=`<span class="k">${esc(m[2])}</span>`}
+    else if(m[3]!==undefined){inT=false;o+=`<span class="k">${esc(m[3])}</span>`}
+    else if(m[4]!==undefined) o+=inT?`<span class="s">${esc(m[4])}</span>`:esc(m[4]);
+    else if(m[5]!==undefined) o+=inT?`<span class="f">${esc(m[5])}</span>`:esc(m[5]);
+    else if(m[6]!==undefined) o+=`<span class="n">${esc(m[6])}</span>`;
+    else o+=esc(m[7]);
+  }
+  return o;
+}
+function hlHtml(src){
+  const re=/<(script|style)\b[^>]*>([\s\S]*?)(?:<\/\1>|$)/gi; let out="",last=0,m;
+  while((m=re.exec(src))){
+    const open=m[0].slice(0,m[0].indexOf(">")+1), body=m[2], close=m[0].slice(open.length+body.length);
+    out+=hlTags(src.slice(last,m.index))+hlTags(open)+highlight(body,m[1].toLowerCase()==="script"?"js":"css").slice(0,-1)+hlTags(close);
+    last=m.index+m[0].length;
+  }
+  return out+hlTags(src.slice(last))+"\n";
+}
+const CSS_T=/(\/\*[\s\S]*?(?:\*\/|$))|("(?:\\.|[^"\\\n])*"?|'(?:\\.|[^'\\\n])*'?)|(@[\w-]+)|(#[0-9a-fA-F]{3,8}\b|-?\d*\.?\d+(?:px|em|rem|vh|vw|ms|deg|fr|ch|s)?\b)|([A-Za-z_-][\w-]*)(\s*:)?|([\s\S])/g;
+function hlCss(src){
+  let out="",m,d=0; CSS_T.lastIndex=0;
+  while((m=CSS_T.exec(src))){
+    if(m[1]!==undefined) out+=`<span class="m">${esc(m[1])}</span>`;
+    else if(m[2]!==undefined) out+=`<span class="s">${esc(m[2])}</span>`;
+    else if(m[3]!==undefined) out+=`<span class="c">${esc(m[3])}</span>`;
+    else if(m[4]!==undefined) out+=`<span class="n">${esc(m[4])}</span>`;
+    else if(m[5]!==undefined){const w=esc(m[5]),c=m[6]||"";out+=d>0?(c?`<span class="k">${w}</span>${c}`:w):`<span class="t">${w}</span>${c}`}
+    else{const ch=m[7];if(ch==="{")d++;else if(ch==="}")d=Math.max(0,d-1);out+=esc(ch)}
+  }
+  return out+"\n";
+}
+function langOf(f){ const e=((f&&f.name||"").match(/\.([^.]+)$/)||[])[1]||""; const x=e.toLowerCase(); return x==="py"?"py":/^(c|h|cpp|cc|cxx|hpp)$/.test(x)?"c":/^(js|mjs|cjs|ts)$/.test(x)?"js":x==="json"?"json":x==="sql"?"sql":/^(html?|svg|xml)$/.test(x)?"html":x==="css"?"css":"java" }
 function curLang(){ return langOf(active()) }
 function highlight(src,lang){
   lang=lang||"java";
-  const T=lang==="py"?TOK_PY:TOK, CT=lang==="py"?PY_CTRL:lang==="c"?C_CTRL:CTRL, KWs=lang==="py"?PY_KW:lang==="c"?C_KW:KW;
+  if(lang==="html") return hlHtml(src); if(lang==="css") return hlCss(src);
+  const X=EXTL[lang], ci=lang==="sql", T=X?X[0]:lang==="py"?TOK_PY:TOK, CT=X?X[1]:lang==="py"?PY_CTRL:lang==="c"?C_CTRL:CTRL, KWs=X?X[2]:lang==="py"?PY_KW:lang==="c"?C_KW:KW;
   let out="",m; T.lastIndex=0;
   while((m=T.exec(src))){
     if(m[1]!==undefined) out+=`<span class="m">${esc(m[1])}</span>`;
@@ -873,8 +958,8 @@ function highlight(src,lang){
     else if(m[4]!==undefined) out+=`<span class="n">${esc(m[4])}</span>`;
     else if(m[5]!==undefined){
       const w=m[5];
-      if(CT.has(w)) out+=`<span class="c">${w}</span>`;
-      else if(KWs.has(w)) out+=`<span class="k">${w}</span>`;
+      if(CT.has(ci?w.toLowerCase():w)) out+=`<span class="c">${w}</span>`;
+      else if(KWs.has(ci?w.toLowerCase():w)) out+=`<span class="k">${w}</span>`;
       else if(/^\s*\(/.test(src.substr(T.lastIndex,40)) && !/^[A-Z]/.test(w)) out+=`<span class="f">${esc(w)}</span>`;
       else if(/^[A-Z]/.test(w)) out+=`<span class="t">${esc(w)}</span>`;
       else out+=esc(w);
@@ -1211,10 +1296,15 @@ function transformLines(fn){
 }
 function toggleComment(){
   if(!active()) return;
+  const L=curLang(), blk=L==="html"?["<!-- "," -->"]:L==="css"?["/* "," */"]:null, pre=L==="py"?"#":L==="sql"?"--":"//";
   transformLines(lines=>{
-    const hash=curLang()==="py";
-    const all=lines.filter(l=>l.trim()).every(l=>hash?/^\s*#/.test(l):/^\s*\/\//.test(l));
-    return lines.map(l=>{ if(!l.trim()) return l; return all?l.replace(hash?/^(\s*)# ?/:/^(\s*)\/\/ ?/,"$1"):l.replace(/^(\s*)/,"$1"+(hash?"# ":"// ")) });
+    const ne=lines.filter(l=>l.trim());
+    if(blk){
+      const a=blk[0].trim(), b=blk[1].trim(), all=ne.every(l=>l.trim().startsWith(a)&&l.trim().endsWith(b));
+      return lines.map(l=>{ if(!l.trim()) return l; const t=l.trim(), ind=l.slice(0,l.length-l.trimStart().length); return all?ind+t.slice(a.length,-b.length).trim():ind+blk[0]+t+blk[1] });
+    }
+    const all=ne.every(l=>new RegExp("^\\s*"+pre).test(l));
+    return lines.map(l=>{ if(!l.trim()) return l; return all?l.replace(new RegExp("^(\\s*)"+pre+" ?"),"$1"):l.replace(/^(\s*)/,"$1"+pre+" ") });
   });
 }
 const PAIRS={"(":")","[":"]","{":"}",'"':'"',"'":"'"};
@@ -1335,7 +1425,7 @@ function showView(v){
   $$(".panelview").forEach(p=>p.classList.toggle("show",p.id==="v-"+v));
   $$(".ab[data-view]").forEach(b=>b.classList.toggle("active",b.dataset.view===v));
   if(v==="search"){ const sl=ta.value.slice(ta.selectionStart,ta.selectionEnd); if(sl&&sl.length<200&&!sl.includes("\n")&&$("#sq").value!==sl){ $("#sq").value=sl; doSearch() } $("#sq").focus(); $("#sq").select() }
-  if(v==="git") renderGit(); else if(v==="db") renderDb(); else if(v==="svc") renderSvc(); else if(v==="account") renderAcct(); else if(v==="extensions") renderExt(); else if(v==="testing") renderTest();
+  if(v==="git") renderGit(); else if(v==="db") renderDb(); else if(v==="svc") renderSvc(); else if(v==="account") renderAcct(); else if(v==="extensions") renderExt(); else if(v==="testing") renderTest(); else if(v==="pet") petRender(); else if(v==="remote") remRender();
   setTimeout(()=>{syncScroll();scheduleMM()},0);
 }
 function toggleSidebar(){const sb=$("#sidebar");sb.classList.toggle("hidden");$$(".ab[data-view]").forEach(b=>b.classList.toggle("active",!sb.classList.contains("hidden")&&b.dataset.view===S.view))}
@@ -1651,7 +1741,7 @@ async function execute(mode){
 
 /* ================= extra editor features ================= */
 let autoSave=store.get("js_auto","0")==="1", acBusy=false, outlineT=0, CW=8.4;
-const findBox=$("#find"); let fCase=false; const fnd={matches:[],idx:-1};
+const findBox=$("#find"); let fCase=false,fWord=false,fRe=false; const fnd={matches:[],idx:-1};
 const lineStart=(v,p)=>p<=0?0:v.lastIndexOf("\n",p-1)+1;
 function measureCW(){const c=document.createElement("canvas").getContext("2d");c.font=`${S.fs}px "Cascadia Code","Consolas","Courier New",monospace`;CW=c.measureText("M").width||8.4}
 function revealPos(p){
@@ -1663,9 +1753,11 @@ function revealPos(p){
 
 /* ---- find / replace ---- */
 function findList(){
-  const q=$("#fq").value, res=[]; if(!q) return res;
-  const hay=fCase?ta.value:ta.value.toLowerCase(), nd=fCase?q:q.toLowerCase(); let i=0;
-  while((i=hay.indexOf(nd,i))>=0){res.push(i);i+=nd.length}
+  const fq=$("#fq"), q=fq.value, res=[]; fnd.lens=[]; fq.classList.remove("err"); if(!q) return res;
+  let src=fRe?q:q.replace(/[.*+?^${}()|[\]\\]/g,"\\$&"); if(fWord) src="\\b(?:"+src+")\\b";
+  let re; try{ re=new RegExp(src,"g"+(fCase?"":"i")) }catch(e){ fq.classList.add("err"); return res }
+  const v=ta.value; let m;
+  while((m=re.exec(v))&&res.length<5000){ if(!m[0].length){re.lastIndex++;continue} res.push(m.index); fnd.lens.push(m[0].length) }
   return res;
 }
 function findRender(){
@@ -1674,7 +1766,7 @@ function findRender(){
   if(!m.length){cnt.textContent="No results";fl.innerHTML="";return}
   cnt.textContent=`${fnd.idx+1} of ${m.length}`;
   const v=ta.value; let out="",last=0;
-  m.forEach((p,i)=>{out+=esc(v.slice(last,p))+`<mark${i===fnd.idx?' class="cur"':""}>${esc(v.slice(p,p+q.length))}</mark>`;last=p+q.length});
+  m.forEach((p,i)=>{const n=fnd.lens[i];out+=esc(v.slice(last,p))+`<mark${i===fnd.idx?' class="cur"':""}>${esc(v.slice(p,p+n))}</mark>`;last=p+n});
   fl.innerHTML=out+esc(v.slice(last))+"\n";
 }
 function findRun(reveal){
@@ -1686,7 +1778,7 @@ function findRun(reveal){
 function findStep(d){
   if(!fnd.matches.length) return;
   fnd.idx=(fnd.idx+d+fnd.matches.length)%fnd.matches.length;
-  findRender(); const p=fnd.matches[fnd.idx]; revealPos(p); ta.setSelectionRange(p,p+$("#fq").value.length);
+  findRender(); const p=fnd.matches[fnd.idx]; revealPos(p); ta.setSelectionRange(p,p+(fnd.lens[fnd.idx]||0));
 }
 function findOpen(rep){
   if(!active()) return;
@@ -1696,33 +1788,39 @@ function findOpen(rep){
 }
 function findClose(){
   findBox.classList.remove("show"); fl.innerHTML="";
-  if(fnd.idx>=0&&fnd.matches[fnd.idx]!=null){const p=fnd.matches[fnd.idx];ta.setSelectionRange(p,p+$("#fq").value.length)}
+  if(fnd.idx>=0&&fnd.matches[fnd.idx]!=null){const p=fnd.matches[fnd.idx];ta.setSelectionRange(p,p+(fnd.lens[fnd.idx]||0))}
   ta.focus();
 }
+function fRepl(p,n){
+  const r=$("#fr").value; if(!fRe) return r;
+  try{ const q=$("#fq").value; return ta.value.slice(p,p+n).replace(new RegExp(fWord?"\\b(?:"+q+")\\b":q,fCase?"":"i"),r) }catch(e){ return r }
+}
 function replaceOne(){
-  const q=$("#fq").value; if(!q||fnd.idx<0) return;
-  const p=fnd.matches[fnd.idx], r=$("#fr").value;
-  ta.focus(); ta.setSelectionRange(p,p+q.length); insertText(r); ta.setSelectionRange(p+r.length,p+r.length);
+  if(fnd.idx<0) return; const p=fnd.matches[fnd.idx], n=fnd.lens[fnd.idx], r=fRepl(p,n);
+  ta.focus(); ta.setSelectionRange(p,p+n); insertText(r); ta.setSelectionRange(p+r.length,p+r.length);
   findRun(true); $("#fr").focus();
 }
-function replaceAll(){
-  const q=$("#fq").value; if(!q||!fnd.matches.length) return;
-  const r=$("#fr").value, v=ta.value, n=fnd.matches.length; let out="",last=0;
-  fnd.matches.forEach(p=>{out+=v.slice(last,p)+r;last=p+q.length}); out+=v.slice(last);
-  ta.focus(); ta.select(); insertText(out); ta.setSelectionRange(0,0); findRun(false); toast(`Replaced ${n} occurrence${n>1?"s":""}`);
+function replaceAllFind(){
+  if(!fnd.matches.length) return; const v=ta.value, m=fnd.matches.slice(), L=fnd.lens.slice(); let out="",last=0;
+  m.forEach((p,i)=>{out+=v.slice(last,p)+fRepl(p,L[i]);last=p+L[i]}); out+=v.slice(last);
+  ta.focus(); ta.select(); insertText(out); ta.setSelectionRange(0,0); findRun(false); toast("Replaced "+m.length+" occurrence"+(m.length>1?"s":""));
 }
 function toggleCase(){fCase=!fCase;$("#fCase").classList.toggle("on",fCase);findRun(true)}
+function toggleWord(){fWord=!fWord;$("#fWord").classList.toggle("on",fWord);findRun(true)}
+function toggleRe(){fRe=!fRe;$("#fRe").classList.toggle("on",fRe);findRun(true)}
 $("#fq").addEventListener("input",()=>findRun(true));
 [$("#fq"),$("#fr")].forEach(el=>el.addEventListener("keydown",e=>{
   e.stopPropagation(); const mod=e.ctrlKey||e.metaKey, k=e.key.toLowerCase();
   if(e.key==="Escape") findClose();
   else if(e.key==="Enter"){e.preventDefault(); if(el.id==="fr") replaceOne(); else findStep(e.shiftKey?-1:1)}
   else if(e.altKey&&k==="c"){e.preventDefault();toggleCase()}
+  else if(e.altKey&&k==="w"){e.preventDefault();toggleWord()}
+  else if(e.altKey&&k==="r"){e.preventDefault();toggleRe()}
   else if(mod&&k==="h"){e.preventDefault();findOpen(true)}
   else if(mod&&k==="f"){e.preventDefault();findOpen(false)}
 }));
-$("#fCase").onclick=toggleCase; $("#fPrev").onclick=()=>findStep(-1); $("#fNext").onclick=()=>findStep(1);
-$("#fClose").onclick=findClose; $("#fRep").onclick=replaceOne; $("#fRepAll").onclick=replaceAll;
+$("#fCase").onclick=toggleCase;$("#fWord").onclick=toggleWord;$("#fRe").onclick=toggleRe; $("#fPrev").onclick=()=>findStep(-1); $("#fNext").onclick=()=>findStep(1);
+$("#fClose").onclick=findClose; $("#fRep").onclick=replaceOne; $("#fRepAll").onclick=replaceAllFind;
 
 /* ---- line operations ---- */
 function lineRange(){
@@ -1858,7 +1956,7 @@ document.addEventListener("keydown",e=>{
 },true);
 ta.addEventListener("contextmenu",e=>{
   e.preventDefault(); ta.focus();
-  showCtx(e.clientX,e.clientY,[["Cut",cut],["Copy",copy],["Paste",paste],["Select All",selectAll],["Find...",()=>findOpen(false)],["Replace...",()=>findOpen(true)],["Format Document",formatDoc],["Command Palette...",()=>openQP(">")]]);
+  showCtx(e.clientX,e.clientY,[["Go to Definition   F12",goDef],["Go to References   Shift+F12",goRefs],["Rename Symbol   Ctrl+F2",renameSym],["Cut",cut],["Copy",copy],["Paste",paste],["Select All",selectAll],["Find...",()=>findOpen(false)],["Replace...",()=>findOpen(true)],["Format Document",formatDoc],["Command Palette...",()=>openQP(">")]]);
 });
 
 /* ---- outline ---- */
@@ -1871,7 +1969,7 @@ function renderOutline(){
 }
 $("#outline").addEventListener("click",e=>{const r=e.target.closest(".oi");if(r&&ws.active)goTo(ws.active,+r.dataset.l,0,0)});
 
-const SHORTCUTS=["Ctrl+Shift+P / F1 — Command Palette","Ctrl+P — Go to File","Ctrl+G — Go to Line","Ctrl+F / Ctrl+H — Find / Replace","Ctrl+S — Save","Alt+N — New File","Alt+W — Close Editor","F5 / Ctrl+Enter — Run","Ctrl+B — Toggle Sidebar","Ctrl+J — Toggle Panel","Ctrl+Shift+E / F — Explorer / Search","Ctrl+Shift+H — Replace in Files","Ctrl+/ — Toggle Line Comment","Alt+↑ / Alt+↓ — Move Line","Shift+Alt+↑ / ↓ — Copy Line","Ctrl+Shift+K — Delete Line","Ctrl+] / Ctrl+[ — Indent / Outdent","Shift+Alt+F — Format Document","Ctrl+= / Ctrl+- — Zoom","F2 — Rename File","Ctrl+D — Select next occurrence","Ctrl+Shift+O — Go to Symbol","Ctrl+Shift+\\ — Go to Matching Bracket","Shift+Alt+A — Toggle Block Comment","Alt+Shift+Z — Zen Mode (Esc to exit)","Alt+PageUp / PageDown — Previous / Next Editor","Alt+Shift+T — Reopen Closed Editor","Tab — accept suggestion / snippet (try sout, fori, psvm)"].join("\n");
+const SHORTCUTS=["Ctrl+Shift+P / F1 — Command Palette","Ctrl+P — Go to File","Ctrl+G — Go to Line","Ctrl+F / Ctrl+H — Find / Replace","Ctrl+S — Save","Alt+N — New File","Alt+W — Close Editor","F5 / Ctrl+Enter — Run","Ctrl+B — Toggle Sidebar","Ctrl+J — Toggle Panel","Ctrl+Shift+E / F — Explorer / Search","Ctrl+Shift+H — Replace in Files","Ctrl+/ — Toggle Line Comment","Alt+↑ / Alt+↓ — Move Line","Shift+Alt+↑ / ↓ — Copy Line","Ctrl+Shift+K — Delete Line","Ctrl+] / Ctrl+[ — Indent / Outdent","Shift+Alt+F — Format Document","Ctrl+= / Ctrl+- — Zoom","F2 — Rename File","Ctrl+D — Select next occurrence","Ctrl+Shift+O — Go to Symbol","Ctrl+Shift+\\ — Go to Matching Bracket","Shift+Alt+A — Toggle Block Comment","Alt+Shift+Z — Zen Mode (Esc to exit)","Alt+PageUp / PageDown — Previous / Next Editor","Alt+Shift+T — Reopen Closed Editor","F12 — Go to Definition","Shift+F12 — Go to References","Ctrl+F2 — Rename Symbol","Ctrl+Click — Go to Definition","Tab — accept suggestion / snippet (try sout, fori, psvm)"].join("\n");
 
 /* ================= commands & menus ================= */
 function undo(){ta.focus();document.execCommand("undo")}
@@ -1890,12 +1988,12 @@ function setTheme(t){
 function toggleTheme(){setTheme(root.getAttribute("data-theme")==="light"?store.get("js_dark","monokai"):"light")}
 const MENUS=[
  ["File",[["New File","Alt+N","newfile"],["Open File...","","openfile"],["Open Folder...","","openfolder"],["Close Folder","","closefolder"],null,["Save","Ctrl+S","save"],["Save All","","saveall"],["Auto Save","","autosave"],["Download File","","download"],null,["Close Editor","Alt+W","closetab"],["Close Other Editors","","closeothers"],["Close All Editors","","closeall"],["Reopen Closed Editor","Alt+Shift+T","reopen"]]],
- ["Edit",[["Undo","Ctrl+Z","undo"],["Redo","Ctrl+Y","redo"],null,["Cut","Ctrl+X","cut"],["Copy","Ctrl+C","copy"],["Paste","Ctrl+V","paste"],null,["Select All","Ctrl+A","selectall"],["Toggle Line Comment","Ctrl+/","comment"],["Insert Date & Time","","datetime"],null,["Find","Ctrl+F","find"],["Replace","Ctrl+H","replace"],["Go to Line...","Ctrl+G","gotoline"],null,["Move Line Up","Alt+↑","moveup"],["Move Line Down","Alt+↓","movedown"],["Copy Line Up","Shift+Alt+↑","copyup"],["Copy Line Down","Shift+Alt+↓","copydown"],["Delete Line","Ctrl+Shift+K","deleteline"],["Select Line","","selectline"],["Format Document","Shift+Alt+F","format"],null,["Select Next Occurrence","Ctrl+D","selectnext"],["Toggle Block Comment","Shift+Alt+A","blockcomment"],["Join Lines","","joinlines"],["Sort Lines Ascending","","sortasc"],["Sort Lines Descending","","sortdesc"],["Trim Trailing Whitespace","","trimws"],null,["Transform to Uppercase","","upper"],["Transform to Lowercase","","lower"],["Transform to Title Case","","title"]]],
- ["View",[["Command Palette...","Ctrl+Shift+P","palette"],["Go to File...","Ctrl+P","quickopen"],null,["Explorer","Ctrl+Shift+E","v-explorer"],["Search","Ctrl+Shift+F","v-search"],["Source Control","Ctrl+Shift+G","v-git"],["Extensions","Ctrl+Shift+X","v-extensions"],["Testing","","v-testing"],["Database","","v-db"],["Services","","v-svc"],null,["Toggle Sidebar","Ctrl+B","togglesidebar"],["Toggle Panel","Ctrl+J","togglepanel"],["Panel Position: Bottom","","pposbottom"],["Panel Position: Left","","pposleft"],["Panel Position: Right","","pposright"],["Toggle Minimap","","minimap"],null,["Zoom In","Ctrl+=","fontup"],["Zoom Out","Ctrl+-","fontdown"],null,["Color Theme...","","colortheme"],["Toggle Day / Night","","toggletheme"],["Dark+ Theme","","themedark"],["Light+ Theme","","themelight"],null,["Full Screen","F11","fullscreen"],["Zen Mode","Alt+Shift+Z","zen"],null,["Toggle Breadcrumbs","","crumbs"],["Toggle Status Bar","","statusbar"]]],
+ ["Edit",[["Undo","Ctrl+Z","undo"],["Redo","Ctrl+Y","redo"],null,["Cut","Ctrl+X","cut"],["Copy","Ctrl+C","copy"],["Paste","Ctrl+V","paste"],null,["Select All","Ctrl+A","selectall"],["Toggle Line Comment","Ctrl+/","comment"],["Insert Date & Time","","datetime"],null,["Find","Ctrl+F","find"],["Replace","Ctrl+H","replace"],["Go to Line...","Ctrl+G","gotoline"],null,["Move Line Up","Alt+↑","moveup"],["Move Line Down","Alt+↓","movedown"],["Copy Line Up","Shift+Alt+↑","copyup"],["Copy Line Down","Shift+Alt+↓","copydown"],["Delete Line","Ctrl+Shift+K","deleteline"],["Go to Definition","F12","godef"],["Go to References","Shift+F12","gorefs"],["Rename Symbol","Ctrl+F2","renamesym"],["Select Line","","selectline"],["Format Document","Shift+Alt+F","format"],null,["Select Next Occurrence","Ctrl+D","selectnext"],["Toggle Block Comment","Shift+Alt+A","blockcomment"],["Join Lines","","joinlines"],["Sort Lines Ascending","","sortasc"],["Sort Lines Descending","","sortdesc"],["Trim Trailing Whitespace","","trimws"],null,["Transform to Uppercase","","upper"],["Transform to Lowercase","","lower"],["Transform to Title Case","","title"]]],
+ ["View",[["Command Palette...","Ctrl+Shift+P","palette"],["Go to File...","Ctrl+P","quickopen"],null,["Explorer","Ctrl+Shift+E","v-explorer"],["Search","Ctrl+Shift+F","v-search"],["Source Control","Ctrl+Shift+G","v-git"],["Extensions","Ctrl+Shift+X","v-extensions"],["Testing","","v-testing"],["Database","","v-db"],["Services","","v-svc"],["Remote Explorer","","v-remote"],["Coding Pet","","v-pet"],null,["Toggle Sidebar","Ctrl+B","togglesidebar"],["Toggle Panel","Ctrl+J","togglepanel"],["Panel Position: Bottom","","pposbottom"],["Panel Position: Left","","pposleft"],["Panel Position: Right","","pposright"],["Toggle Minimap","","minimap"],null,["Zoom In","Ctrl+=","fontup"],["Zoom Out","Ctrl+-","fontdown"],null,["Color Theme...","","colortheme"],["Toggle Day / Night","","toggletheme"],["Dark+ Theme","","themedark"],["Light+ Theme","","themelight"],null,["Full Screen","F11","fullscreen"],["Zen Mode","Alt+Shift+Z","zen"],null,["Toggle Breadcrumbs","","crumbs"],["Toggle Status Bar","","statusbar"]]],
  ["Go",[["Go to File...","Ctrl+P","quickopen"],["Go to Line...","Ctrl+G","gotoline"],["Go to Symbol in Editor...","Ctrl+Shift+O","gotosymbol"],["Go to Matching Bracket","Ctrl+Shift+\\","gotobracket"],null,["Next Editor","Alt+PageDown","nexttab"],["Previous Editor","Alt+PageUp","prevtab"]]],
  ["Run",[["Run Code","F5","run"],["Compile Only","","compile"],["Go Live (HTML)","","golive"],["Stop Live Server","","stoplive"],["Open Live in Browser Tab","","livetab"],null,["Judge0 Settings...","","settings"]]],
  ["Terminal",[["New Terminal","Ctrl+Shift+`","newterm"],["Clear Terminal","","clearterm"],null,["Run Active File","","run"]]],
- ["Help",[["Show All Commands","F1","palette"],["Keyboard Shortcuts","","shortcuts"],["About Developer","","aboutdev"],["About CodePulse","","about"]]]
+ ["Help",[["Show All Commands","F1","palette"],["Release Notes","","releasenotes"],["Keyboard Shortcuts","","shortcuts"],["About Developer","","aboutdev"],["About CodePulse","","about"]]]
 ];
 
 function openAbout(){
@@ -1907,7 +2005,7 @@ function openAbout(){
     d.innerHTML='<div class="dbar"><b>About CodePulse</b><span class="sp"></span><button class="vbtn sec2" id="devClose">✕ Close</button></div>'+
 '<div class="wrap">'+
  '<div class="hero"><div class="av" style="background:linear-gradient(135deg,#2aa1ff,#2ecc8f)"><svg viewBox="0 0 64 64" width="52" height="52" aria-hidden="true"><path d="M23 20L11 32l12 12M41 20l12 12-12 12" fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M25 33h4l3-9 5 18 3-9h3" fill="none" stroke="#0b3d5c" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg></div><div>'+
-  '<h1>CodePulse</h1><div class="sub">Modern editor with live previews · vr.1.5.0</div>'+
+  '<h1>CodePulse</h1><div class="sub">Modern editor with live previews · vr.1.6.0</div>'+
   '<div class="links"><a class="lk pri" href="#" id="abDev">👨‍💻 About Developer</a><a class="lk" href="https://github.com/abhinavmaurya12" target="_blank" rel="noopener noreferrer">GitHub</a></div></div></div>'+
  '<div class="card"><h2>🚀 What is CodePulse?</h2><p>CodePulse is a VS Code–style code editor that runs entirely in your browser — nothing to install and no sign-in needed (an optional local profile is available in the Account view). Write, run and preview <b>HTML, CSS, JavaScript, Java, Python, C and C++</b> code on a laptop, tablet or phone, and install it as an app (PWA) for quick access. Your files, folders, settings and theme are stored locally in your browser.</p></div>'+
  '<div class="grid">'+
@@ -1924,10 +2022,11 @@ function openAbout(){
  '</div>'+
  '<div class="card"><h2>⌨️ Handy shortcuts</h2><table>'+key("Command Palette","Ctrl+Shift+P")+key("Go to File","Ctrl+P")+key("Run","F5")+key("Find / Replace","Ctrl+F / H").replace("</kbd> + <kbd>H","</kbd> / <kbd>H")+key("Toggle Sidebar","Ctrl+B")+key("Toggle Panel","Ctrl+J")+key("Source Control","Ctrl+Shift+G")+key("New Terminal","Ctrl+`")+key("New File","Alt+N")+key("Zen Mode","Alt+Shift+Z")+'</table><p style="margin-top:8px">See <b>Help → Keyboard Shortcuts</b> for the full list.</p></div>'+
  '<div class="card"><h2>🛠️ Built with</h2><ul>'+li(["<b>HTML</b>, <b>CSS</b> and <b>JavaScript</b>","<b>Java server</b> — Java, Python, C and C++ code is compiled and run on <b>Judge0 CE</b>","<b>SQLite</b> in the browser by <b>sql.js</b>","<b>Service Worker (sw)</b> and a web app manifest for the installable app","<b>Shortcut</b> and <b>APK / app install</b> — install CodePulse from the browser (PWA) with the Install button"])+'</ul></div>'+
- '<div class="card"><h2>🆕 What’s new in vr.1.5.0</h2><ul>'+li(["<b>Monokai</b> is now the default color theme","Manage (gear) menu and other pop-up menus now fit properly on phones and small screens","Day / Night toggle switches between Light and Monokai"])+'</ul></div>'+
+ '<div class="card"><h2>🆕 What’s new in vr.1.6.0</h2><ul>'+li(["Real syntax highlighting for <b>HTML, CSS, JavaScript, JSON and SQL</b> (HTML highlights embedded script/style)","Find widget: <b>whole word</b> and <b>regex</b> (with $1 replace)","<b>Go to Definition (F12)</b>, <b>Go to References (Shift+F12)</b>, <b>Rename Symbol (Ctrl+F2)</b>, Ctrl+click","Side-by-side <b>Diff view</b> from Source Control and a file <b>Timeline</b> in the Explorer","Comment toggle for HTML, CSS and SQL; fixed Replace All in the Search view"])+'</ul></div>'+
+ '<div class="card"><h2>vr.1.5.0</h2><ul>'+li(["<b>Monokai</b> is now the default color theme","Manage (gear) menu and other pop-up menus now fit properly on phones and small screens","Day / Night toggle switches between Light and Monokai"])+'</ul></div>'+
  '<div class="card"><h2>vr.1.4.0</h2><ul>'+li(["Run <b>Python, C and C++</b> code on Judge0, together with Java (HTML, CSS and JavaScript run in the live preview)","Syntax colors, snippets, comment toggle and error markers for Python, C and C++","Terminal commands: <b>python</b>, <b>gcc</b> and <b>g++</b>","Language logo for <b>PHP</b> files"])+'</ul></div>'+
  '<div class="card"><h2>vr.1.3.0</h2><ul>'+li(["<b>Account</b> section in the side bar (name, role, photo, email)","<b>Extensions</b>, <b>Testing</b> and a <b>Manage</b> menu, like VS Code","<b>Go Live</b> button for HTML files","Language logos for HTML, CSS, JavaScript, Java, Python, C and C++","5 new color themes and 14 new built-in extensions","VS Code-style tab close buttons"])+'</ul></div>'+
- '<div class="card"><h2>Version</h2><p>CodePulse <b>vr.1.5.0</b> — Modern editor with live previews. Created by Abhinav Maurya.</p></div>'+
+ '<div class="card"><h2>Version</h2><p>CodePulse <b>vr.1.6.0</b> — Modern editor with live previews. Created by Abhinav Maurya.</p></div>'+
 '</div>';
     document.body.appendChild(d);
     d.querySelector("#devClose").onclick=()=>d.classList.remove("show");
@@ -2084,6 +2183,262 @@ Object.assign(ACT,{
   upper:()=>transformSel(t=>t.toUpperCase()),lower:()=>transformSel(t=>t.toLowerCase()),title:()=>transformSel(toTitle),blockcomment:blockComment,
   zen:toggleZen,crumbs:()=>root.classList.toggle("nocrumbs"),statusbar:()=>root.classList.toggle("nostatus")
 });
+/* ---- definitions / references / rename ---- */
+function wordAt(){const v=ta.value,p=ta.selectionStart;let a=p,b=p;while(a>0&&/[\w$]/.test(v[a-1]))a--;while(b<v.length&&/[\w$]/.test(v[b]))b++;return v.slice(a,b)}
+const escW=w=>w.replace(/\$/g,"\\$");
+function defHits(w){
+  const e=escW(w), out=[], rx=[
+    new RegExp("\\b(?:class|interface|enum|record|struct|def|function|namespace)\\s+"+e+"\\b"),
+    new RegExp("\\b(?:const|let|var)\\s+"+e+"\\b"),
+    new RegExp("^\\s*(?!return\\b|new\\b|else\\b|throw\\b)(?:(?:public|private|protected|static|final|abstract|synchronized|async|inline|virtual)\\s+)*[\\w$<>\\[\\],.?*&:]+\\s+\\**"+e+"\\s*\\([^;]*$"),
+    new RegExp("^\\s*(?:async\\s+|static\\s+)*"+e+"\\s*\\([^)]*\\)\\s*\\{\\s*$")];
+  ws.files.forEach(f=>f.content.split("\n").forEach((l,i)=>{ if(rx.some(r=>r.test(l))) out.push({f,line:i+1,t:l.trim()}) }));
+  return out;
+}
+const symPick=(ph,h)=>pickList(ph,h.slice(0,200).map(x=>({label:x.t.slice(0,80),key:x.f.name+":"+x.line,run:()=>goTo(x.f.id,x.line,0,0)})));
+function goDef(){
+  if(!active()) return; const w=wordAt(); if(!w){toast("No symbol at cursor");return}
+  const h=defHits(w); if(!h.length){toast("No definition found for '"+w+"'");return}
+  if(h.length===1) goTo(h[0].f.id,h[0].line,0,0); else symPick("Definitions of "+w,h);
+}
+function goRefs(){
+  if(!active()) return; const w=wordAt(); if(!w){toast("No symbol at cursor");return}
+  const rx=new RegExp("(?<![\\w$])"+escW(w)+"(?![\\w$])"), out=[];
+  ws.files.forEach(f=>f.content.split("\n").forEach((l,i)=>{ if(rx.test(l)) out.push({f,line:i+1,t:l.trim()}) }));
+  if(!out.length){toast("No references found");return} symPick(out.length+" references to "+w,out);
+}
+async function renameSym(){
+  if(!active()) return; const w=wordAt(); if(!w){toast("No symbol at cursor");return}
+  const r=await dialog({title:"Rename Symbol",inputs:[{label:"New name for '"+w+"' (all whole-word matches in every file)",value:w}],ok:"Rename"}); if(!r) return;
+  const nn=r[0].trim(); if(!nn||nn===w||!/^[A-Za-z_$][\w$]*$/.test(nn)){toast("Invalid name");return}
+  const rx=new RegExp("(?<![\\w$])"+escW(w)+"(?![\\w$])","g"); let n=0;
+  ws.files.forEach(f=>{ const c=f.content.replace(rx,()=>{n++;return nn}); if(c!==f.content){ f.content=c; if(f.id===ws.active){const st=ta.scrollTop;ta.value=c;refreshEditor();ta.scrollTop=st} } });
+  renderAll(); persist(); toast("Renamed "+n+" occurrence"+(n!==1?"s":""));
+}
+ta.addEventListener("click",e=>{ if(e.ctrlKey||e.metaKey) goDef() });
+/* ---- diff view + timeline ---- */
+function diffRows(a,b){
+  a=a.split("\n"); b=b.split("\n"); const n=a.length, m=b.length, rows=[];
+  if(n*m>4e6) return [...a.map((t,i)=>({t:"d",l:t,i:i+1})),...b.map((t,j)=>({t:"a",r:t,j:j+1}))];
+  const dp=Array.from({length:n+1},()=>new Uint16Array(m+1));
+  for(let i=n-1;i>=0;i--)for(let j=m-1;j>=0;j--)dp[i][j]=a[i]===b[j]?dp[i+1][j+1]+1:Math.max(dp[i+1][j],dp[i][j+1]);
+  let i=0,j=0;
+  while(i<n&&j<m){ if(a[i]===b[j]) rows.push({t:"e",l:a[i],r:b[j],i:++i,j:++j}); else if(dp[i+1][j]>=dp[i][j+1]) rows.push({t:"d",l:a[i],i:++i}); else rows.push({t:"a",r:b[j],j:++j}) }
+  while(i<n) rows.push({t:"d",l:a[i],i:++i}); while(j<m) rows.push({t:"a",r:b[j],j:++j});
+  return rows;
+}
+function diffView(title,o,n,fid){
+  let d=$("#diffpage");
+  if(!d){
+    d=document.createElement("div"); d.id="diffpage"; d.tabIndex=-1;
+    d.innerHTML='<div class="dbar"><b id="diffT"></b><span class="sp"></span><button class="vbtn sec2" id="diffOpen">Open File</button><button class="vbtn sec2" id="diffX">✕ Close</button></div><div id="diffbody"></div>';
+    document.body.appendChild(d); $("#diffX").onclick=()=>d.classList.remove("show");
+    d.addEventListener("keydown",e=>{e.stopPropagation();if(e.key==="Escape")d.classList.remove("show")});
+  }
+  const rows=diffRows(o||"",n||""), ch=rows.filter(r=>r.t!=="e").length, c=(k,t)=>`<td class="${k}">${esc(t==null?"":t)}</td>`;
+  $("#diffT").textContent=title+(ch?"  ·  "+ch+" changed line"+(ch>1?"s":""):" (no changes)");
+  $("#diffOpen").style.display=fid?"":"none"; $("#diffOpen").onclick=()=>{d.classList.remove("show");openFile(fid)};
+  $("#diffbody").innerHTML="<table>"+rows.map(r=>`<tr><td class="nn">${r.i||""}</td>${c(r.t==="d"?"d":"",r.l)}<td class="nn">${r.j||""}</td>${c(r.t==="a"?"a":"",r.r)}</tr>`).join("")+"</table>";
+  d.classList.add("show"); d.focus();
+}
+function diffActive(){
+  const f=active(); if(!f){toast("Open a file first");return} if(!ws.git){toast("Initialize a repository in Source Control first");return}
+  const h=gitHead(), p=fpath(f); diffView(f.name+" (HEAD ↔ Working Tree)",gitHas(h,p)?h[p]:"",f.content,f.id);
+}
+function renderTimeline(){
+  const box=$("#timeline"); if(!box) return; const f=active();
+  if(!f){box.innerHTML='<div class="oinfo">The active editor cannot provide timeline information.</div>';return}
+  const p=fpath(f), cm=ws.git?ws.git.commits:[], items=[]; let prev=null;
+  cm.forEach(c=>{ const v=gitHas(c.files,p)?c.files[p]:null; if(v!==null&&v!==prev) items.push({c,old:prev==null?"":prev,v}); prev=v });
+  if(!items.length){box.innerHTML='<div class="oinfo">'+(ws.git?"No commits for this file yet.":"Initialize a repository in Source Control to see file history.")+'</div>';return}
+  items.reverse(); box._items=items;
+  box.innerHTML=items.map((x,i)=>'<div class="grow" data-i="'+i+'" title="'+esc(x.c.msg)+'"><span class="gn">'+esc(x.c.msg)+'</span><span class="gd">'+esc(new Date(x.c.time).toLocaleDateString())+'</span></div>').join("");
+}
+$("#timeline").addEventListener("click",e=>{ const r=e.target.closest(".grow"), f=active(); if(!r||!f) return; const x=$("#timeline")._items[+r.dataset.i]; diffView(f.name+" @ #"+x.c.id+" — "+x.c.msg,x.old,x.v,f.id) });
+$('#v-explorer .sec[data-sec="timeline"]').addEventListener("click",()=>setTimeout(renderTimeline,0));
+{ const _ro=renderOutline; renderOutline=function(){ _ro(); renderTimeline() } }
+Object.assign(ACT,{godef:goDef,gorefs:goRefs,renamesym:renameSym});
+/* ---- coding pet ---- */
+const PETS=["🐱","🐶","🦊","🐰","🐼","🐸"], PET_TITLES=["Newbie","Junior Dev","Mid Dev","Senior Dev","Wizard"];
+const PET_TIPS=["Save often with Ctrl+S 💾","Press F5 to run your code ▶","Ctrl+P jumps to any file ⚡","Time for a water break 💧","Try F12 on a function name 🔎","Commit small and often 🌿","Stretch your wrists! 🙆","Ctrl+/ comments a line 💬"];
+let PET=Object.assign({name:"Byte",kind:"🐱",hunger:80,joy:80,energy:90,xp:0,lvl:1,sleep:false,t:Date.now(),keys:0},(()=>{try{return JSON.parse(store.get("js_pet","{}"))||{}}catch(e){return{}}})());
+let petMsg="", petMsgT=0, petUT=0;
+const cl100=v=>Math.max(0,Math.min(100,v));
+function petSave(){ store.set("js_pet",JSON.stringify(PET)) }
+function petDecay(min){
+  PET.hunger-=min*.5; PET.joy-=min*(PET.hunger<30?.6:.25); PET.energy+=PET.sleep?min*4:-min*.2;
+  if(PET.sleep&&PET.energy>=100) PET.sleep=false;
+  PET.hunger=cl100(PET.hunger); PET.joy=cl100(PET.joy); PET.energy=cl100(PET.energy); PET.t=Date.now();
+}
+function petSay(m){ petMsg=m; clearTimeout(petMsgT); petMsgT=setTimeout(()=>{petMsg="";petUI()},6000); petUI() }
+function petXp(x,j){
+  PET.xp+=x; PET.joy=cl100(PET.joy+(j||0));
+  while(PET.xp>=PET.lvl*50){ PET.xp-=PET.lvl*50; PET.lvl++; petSay("🎉 Level "+PET.lvl+"! Now a "+PET_TITLES[Math.min(4,PET.lvl-1)]) }
+}
+function petMood(){
+  if(PET.sleep) return ["sleep","Zzz…","💤"];
+  if(PET.hunger<25) return ["hungry","I'm hungry… feed me!","🍖"];
+  if(PET.energy<20) return ["sad","So sleepy…","🥱"];
+  if(PET.joy<30) return ["sad","Let's play or code something!","💔"];
+  if(PET.joy>75) return ["happy","Love coding with you!","❤️"];
+  return ["","Keep coding, I'm watching 👀",""];
+}
+function petUI(){ if(petUT||!sbVisible("pet")) return; petUT=setTimeout(()=>{petUT=0;petRender()},250) }
+function petRender(){
+  const box=$("#petBody"); if(!box) return; const m=petMood(), need=PET.lvl*50;
+  const bar=(l,v,c)=>`<div class="pbar"><span>${l}</span><i><b style="width:${Math.round(v)}%;background:${c}"></b></i></div>`;
+  box.innerHTML=`<div class="pstage"><div class="pbub">${esc(petMsg||m[1])}</div><div class="pet ${m[0]}" data-p="pat" title="Pet me">${PET.kind}</div><div class="pmood">${m[2]}</div><div class="pground"></div></div>
+<div class="pname"><span>${esc(PET.name)}</span><small>Lv ${PET.lvl} · ${PET_TITLES[Math.min(4,PET.lvl-1)]}</small><button class="iconbtn" data-p="name" title="Rename">✎</button></div>
+${bar("Hunger",PET.hunger,"#f59e0b")}${bar("Happiness",PET.joy,"#ec4899")}${bar("Energy",PET.energy,"#3b82f6")}${bar("XP "+PET.xp+"/"+need,PET.xp/need*100,"#22c55e")}
+<div class="btnrow"><button class="vbtn" data-p="feed">🍖 Feed</button><button class="vbtn" data-p="play">🎾 Play</button><button class="vbtn sec2" data-p="sleep">${PET.sleep?"☀️ Wake":"🌙 Sleep"}</button></div>
+<div class="pkinds">${PETS.map(k=>`<button data-p="kind" data-k="${k}" class="${k===PET.kind?"on":""}">${k}</button>`).join("")}</div>
+<div class="acnote" style="color:var(--fg-muted);font-size:12px;line-height:1.5">Your pet earns XP while you type and when code runs successfully. Errors make it sad. Feed and play with it to keep it happy. It is saved in this browser.</div>`;
+}
+$("#petBody").addEventListener("click",async e=>{
+  const b=e.target.closest("[data-p]"); if(!b) return; const a=b.dataset.p;
+  if(a==="feed"){ if(PET.sleep){petSay("Shh… I'm sleeping 😴");return} if(PET.hunger>=95){petSay("I'm full! 😋");return} PET.hunger=cl100(PET.hunger+30); petXp(1,5); petSay("Yum! 🍖") }
+  else if(a==="play"){ if(PET.sleep||PET.energy<15){petSay("Too tired to play 🥱");return} PET.energy=cl100(PET.energy-12); PET.hunger=cl100(PET.hunger-5); petXp(2,20); petSay("Wheee! 🎾") }
+  else if(a==="sleep"){ PET.sleep=!PET.sleep; petSay(PET.sleep?"Goodnight 🌙":"Good morning! ☀️") }
+  else if(a==="pat"){ PET.sleep=false; petXp(0,3); petSay(["Purr… 💕","Hehe 😊","More pats please!"][Math.floor(Math.random()*3)]) }
+  else if(a==="kind"){ PET.kind=b.dataset.k; petSay("New look! "+PET.kind) }
+  else if(a==="name"){ const r=await dialog({title:"Rename your pet",inputs:[{label:"Name",value:PET.name}],ok:"Save"}); if(r&&r[0].trim()) PET.name=r[0].trim().slice(0,20) }
+  petSave(); petRender();
+});
+ta.addEventListener("input",()=>{ PET.keys++; if(PET.sleep&&PET.energy>25){PET.sleep=false;petSay("Oh, you're coding! 👀")} if(PET.keys%25===0){petXp(1,2);petUI()} });
+{ const _sr=svcRec; svcRec=function(n,st,ok,t){ _sr(n,st,ok,t); if(ok){PET.sleep=false;petXp(10,10);petSay("It works! 🎉 +10 XP")} else {PET.joy=cl100(PET.joy-8);petSay("Oops… let's fix it together 🛠")} petSave(); petUI() } }
+petDecay(Math.min(600,(Date.now()-PET.t)/60000));
+setInterval(()=>{ petDecay(.5); if(!PET.sleep&&Math.random()<.3) petSay(PET_TIPS[Math.floor(Math.random()*PET_TIPS.length)]); petSave(); petUI() },30000);
+addEventListener("beforeunload",petSave);
+ACT["v-pet"]=()=>showView("pet");
+/* ---- remote explorer (GitHub repos, URLs, SSH targets) ---- */
+let REM=Object.assign({recent:[],ssh:[]},(()=>{try{return JSON.parse(store.get("js_remote","{}"))||{}}catch(e){return{}}})());
+REM.conn=null; const RT={}, RX=new Set(); let RMSG="";
+const remSave=()=>store.set("js_remote",JSON.stringify({recent:REM.recent,ssh:REM.ssh}));
+const pth=x=>x.split("/").filter(Boolean).map(encodeURIComponent).join("/");
+function parseRepo(v){
+  v=(v||"").trim().replace(/^https?:\/\/github\.com\//,"").replace(/\.git$/,"").replace(/\/+$/,"");
+  const m=/^([\w.-]+)\/([\w.-]+)(?:\/tree\/(.+))?$/.exec(v); return m?{repo:m[1]+"/"+m[2],branch:m[3]||""}:null;
+}
+async function ghGet(path){
+  const r=await fetch("https://api.github.com/repos/"+REM.conn.repo+path);
+  if(!r.ok) throw new Error(r.status===403?"GitHub rate limit reached — try again later":r.status===404?"Repository, branch or path not found":"GitHub returned HTTP "+r.status);
+  return r.json();
+}
+async function remLoad(path){
+  const d=await ghGet("/contents/"+pth(path)+"?ref="+encodeURIComponent(REM.conn.branch));
+  RT[path]=(Array.isArray(d)?d:[d]).sort((a,b)=>(a.type===b.type?0:a.type==="dir"?-1:1)||a.name.localeCompare(b.name));
+}
+function remStatus(){ $("#sbRemote").classList.toggle("on",!!REM.conn); $("#sbRemoteT").textContent=REM.conn?"GitHub: "+REM.conn.repo:"Remote" }
+async function remConnect(v){
+  const c=parseRepo(v); if(!c){toast("Enter a repository like owner/repo");return}
+  RMSG="Connecting to "+c.repo+"…"; REM.conn=null; remRender();
+  try{
+    REM.conn=c; const info=await ghGet(""); c.branch=c.branch||info.default_branch;
+    Object.keys(RT).forEach(k=>delete RT[k]); RX.clear(); await remLoad("");
+    REM.recent=[c.repo,...REM.recent.filter(x=>x!==c.repo)].slice(0,8); remSave(); RMSG=""; toast("Connected to "+c.repo);
+  }catch(e){ REM.conn=null; RMSG="⚠ "+(e.message||e) }
+  remRender(); remStatus();
+}
+async function remOpen(path){
+  const e=Object.values(RT).flat().find(x=>x.path===path); if(!e||!e.download_url) return;
+  if(e.size>1048576){toast("File is larger than 1 MB");return}
+  const dir=[REM.conn.repo.split("/")[1],...path.split("/").slice(0,-1)].join("/");
+  let f=ws.files.find(x=>x.name===e.name&&(x.dir||"")===dir);
+  if(!f){ const r=await fetch(e.download_url); if(!r.ok) throw new Error("HTTP "+r.status); const t=await r.text(); f={id:ws.nextId++,name:e.name,content:t,saved:t,dir}; ws.files.push(f) }
+  openFile(f.id); persist();
+}
+async function remClone(){
+  const c=REM.conn; if(!c) return;
+  if(ws.files.some(isDirty)){ const r=await dialog({title:"Open Repository",body:"Replace the current workspace with '"+c.repo+"'? Unsaved changes will be discarded.",ok:"Open"}); if(!r) return }
+  RMSG="Downloading file list…"; remRender();
+  const t=await ghGet("/git/trees/"+encodeURIComponent(c.branch)+"?recursive=1");
+  const pick=t.tree.filter(x=>x.type==="blob"&&TEXT_EXT.test(x.path)&&!SKIP_DIR.test(x.path)&&(x.size||0)<=200000).slice(0,60);
+  if(!pick.length){RMSG="No text files found in this repository.";remRender();return}
+  const out=[], base="https://raw.githubusercontent.com/"+c.repo+"/"+pth(c.branch)+"/";
+  for(let i=0;i<pick.length;i+=8){
+    RMSG="Downloading "+Math.min(i+8,pick.length)+" / "+pick.length+"…"; remRender();
+    await Promise.all(pick.slice(i,i+8).map(async x=>{ try{ const r=await fetch(base+pth(x.path)); if(r.ok) out.push({x,t:await r.text()}) }catch(_){} }));
+  }
+  resetWorkspace(); out.sort((a,b)=>a.x.path.localeCompare(b.x.path));
+  out.forEach(({x,t})=>{ const i=x.path.lastIndexOf("/"); ws.files.push({id:ws.nextId++,name:x.path.slice(i+1),content:t,saved:t,dir:i<0?"":x.path.slice(0,i)}) });
+  ws.folder=c.repo.split("/")[1]; setFolderName(ws.folder); RMSG="";
+  if(ws.files.length) openFile(ws.files[0].id); else showWelcome();
+  showView("explorer"); persist(); toast("Opened "+ws.folder+" ("+ws.files.length+" files"+(t.truncated||pick.length===60?", first 60 text files":"")+")");
+}
+async function remUrl(u){
+  u=(u||"").trim(); if(!/^https?:\/\//i.test(u)){toast("Enter a full http(s) URL");return}
+  u=u.replace(/^https:\/\/github\.com\/([^/]+\/[^/]+)\/blob\//,"https://raw.githubusercontent.com/$1/");
+  const r=await fetch(u); if(!r.ok) throw new Error("HTTP "+r.status);
+  const t=await r.text(), nm=uniqueName(decodeURIComponent(u.split(/[?#]/)[0].split("/").pop()||"remote.txt"));
+  const f={id:ws.nextId++,name:nm,content:t,saved:t,dir:""}; ws.files.push(f); openFile(f.id); persist(); toast("Opened "+nm);
+}
+async function sshAdd(){
+  const r=await dialog({title:"Add SSH Target",body:"Browsers cannot open SSH connections. CodePulse saves the target and copies the ssh command so you can paste it in your own terminal.",inputs:[{label:"user@host",value:""},{label:"Port",value:"22"}],ok:"Add"});
+  if(!r) return; if(!/^[\w.-]+@[\w.-]+$/.test(r[0].trim())){toast("Use the form user@host");return}
+  REM.ssh.push({h:r[0].trim(),p:(r[1]||"22").trim()||"22"}); remSave(); remRender();
+}
+function remTree(path,depth){
+  return (RT[path]||[]).map(e=>{
+    const pad=8+depth*12;
+    if(e.type==="dir"){ const o=RX.has(e.path); return `<div class="grow" data-d="${esc(e.path)}" style="padding-left:${pad}px"><span class="rtw" style="transform:rotate(${o?90:0}deg)">›</span><span class="gn">${esc(e.name)}</span></div>`+(o?remTree(e.path,depth+1):"") }
+    return `<div class="grow" data-f="${esc(e.path)}" style="padding-left:${pad+18}px">${fileIcon(e.name)}<span class="gn">${esc(e.name)}</span></div>`;
+  }).join("");
+}
+function remRender(){
+  const box=$("#remBody"); if(!box) return; const c=REM.conn, sec=t=>'<div class="gsec" style="cursor:default">'+t+'</div>';
+  let h=sec("GitHub Repository");
+  if(c) h+=`<div class="ginfo"><span class="dot ok" style="margin-right:6px"></span><b>${esc(c.repo)}</b> · ${esc(c.branch)}</div><div class="btnrow" style="padding:0 14px 6px"><button class="vbtn" data-a="clone">Open in Explorer</button><button class="vbtn sec2" data-a="disc">Disconnect</button></div>`+(remTree("",0)||'<div class="ginfo">Empty repository.</div>');
+  else{
+    h+='<div class="scm"><input class="remin" id="remRepo" placeholder="owner/repo or GitHub URL" spellcheck="false" autocomplete="off"><button class="vbtn" data-a="conn">Connect</button></div>';
+    h+=REM.recent.map(r=>`<div class="grow" data-a="recent" data-r="${esc(r)}"><span class="gn">${esc(r)}</span><span class="acts"><button class="sopt" data-a="rmrecent" data-r="${esc(r)}" title="Remove">${XI}</button></span></div>`).join("");
+  }
+  if(RMSG) h+='<div class="ginfo">'+esc(RMSG)+'</div>';
+  h+=sec("Open from URL")+'<div class="scm"><input class="remin" id="remUrl" placeholder="https://… (raw file or GitHub blob link)" spellcheck="false" autocomplete="off"><button class="vbtn sec2" data-a="url">Open File</button></div>';
+  h+=sec("SSH Targets")+(REM.ssh.length?REM.ssh.map((x,i)=>`<div class="grow" data-a="ssh" data-i="${i}" title="Click to copy the ssh command"><span class="gn">${esc(x.h)}</span><span class="gd">port ${esc(x.p)}</span><span class="acts"><button class="sopt" data-a="sshdel" data-i="${i}" title="Remove">${XI}</button></span></div>`).join(""):'<div class="ginfo">No SSH targets saved.</div>')+'<div class="scm"><button class="vbtn sec2" data-a="sshadd">+ Add SSH Target</button></div>';
+  h+='<div class="ginfo">Remote Explorer connects to public GitHub repositories and URLs. Browsers cannot open SSH, WSL or Dev Container sessions, so SSH targets only copy the command for your own terminal.</div>';
+  box.innerHTML=h;
+}
+$("#remBody").addEventListener("keydown",e=>{ e.stopPropagation(); if(e.key!=="Enter") return; if(e.target.id==="remRepo") $('#remBody [data-a="conn"]').click(); else if(e.target.id==="remUrl") $('#remBody [data-a="url"]').click() });
+$("#remBody").addEventListener("click",async e=>{
+  const b=e.target.closest("[data-a],[data-d],[data-f]"); if(!b) return; const D=b.dataset;
+  try{
+    if(D.a==="conn") await remConnect($("#remRepo").value);
+    else if(D.a==="recent") await remConnect(D.r);
+    else if(D.a==="rmrecent"){ REM.recent=REM.recent.filter(x=>x!==D.r); remSave(); remRender() }
+    else if(D.a==="disc"){ REM.conn=null; RMSG=""; remStatus(); remRender() }
+    else if(D.a==="clone") await remClone();
+    else if(D.a==="url") await remUrl($("#remUrl").value);
+    else if(D.a==="sshadd") await sshAdd();
+    else if(D.a==="sshdel"){ REM.ssh.splice(+D.i,1); remSave(); remRender() }
+    else if(D.a==="ssh"){ const x=REM.ssh[+D.i], cmd="ssh "+x.h+(x.p!=="22"?" -p "+x.p:""); try{await navigator.clipboard.writeText(cmd);toast("Copied: "+cmd)}catch(_){toast(cmd)} }
+    else if(D.d!==undefined){ if(RX.has(D.d)) RX.delete(D.d); else{ RX.add(D.d); if(!RT[D.d]) await remLoad(D.d) } remRender() }
+    else if(D.f!==undefined) await remOpen(D.f);
+  }catch(err){ RMSG="⚠ "+(/Failed to fetch|NetworkError/i.test(err.message)?"Could not reach the server (offline, or it blocks cross-origin requests)":err.message); remRender() }
+});
+$("#remRef").addEventListener("click",async()=>{ if(REM.conn){ try{ Object.keys(RT).forEach(k=>delete RT[k]); await remLoad(""); for(const d of [...RX]) await remLoad(d) }catch(e){RMSG="⚠ "+e.message} } remRender(); toast("Refreshed") });
+ACT["v-remote"]=()=>{ showView("remote"); setTimeout(()=>{const i=$("#remRepo"); i&&i.focus()},0) };
+defCmd("remote","Remote: Connect to GitHub Repository…","",ACT["v-remote"]);
+/* ---- release notes ---- */
+const RELEASES=[
+ ["1.6.0","October 2026",["<b>Coding Pet</b> in the side bar: it earns XP while you type, celebrates successful runs and gets sad on errors","Real syntax highlighting for <b>HTML, CSS, JavaScript, JSON and SQL</b>, including script and style blocks inside HTML","Find widget: <b>whole word</b> and <b>regex</b> toggles, with $1 groups in Replace","<b>Go to Definition</b> (F12 / Ctrl+click), <b>Go to References</b> (Shift+F12) and <b>Rename Symbol</b> (Ctrl+F2)","Side-by-side <b>Diff view</b> from Source Control, plus a file <b>Timeline</b> in the Explorer","Toggle Line Comment now works for HTML, CSS and SQL","<b>Release Notes</b> page in the Manage menu and the Help menu","<b>Remote Explorer</b> in the side bar: browse and open GitHub repositories, open files from a URL, and save SSH targets","Fixed: Replace All in the Search view"]],
+ ["1.5.0","",["<b>Monokai</b> is now the default color theme","Manage (gear) menu and other pop-up menus fit properly on phones and small screens","Day / Night toggle switches between Light and Monokai"]],
+ ["1.4.0","",["Run <b>Python, C and C++</b> on Judge0, together with Java","Syntax colors, snippets, comment toggle and error markers for Python, C and C++","Terminal commands: <b>python</b>, <b>gcc</b> and <b>g++</b>","Language logo for <b>PHP</b> files"]],
+ ["1.3.0","",["<b>Account</b> section in the side bar (name, role, photo, email)","<b>Extensions</b>, <b>Testing</b> and a <b>Manage</b> menu, like VS Code","<b>Go Live</b> button for HTML files","Language logos for HTML, CSS, JavaScript, Java, Python, C and C++","5 new color themes and 14 new built-in extensions","VS Code-style tab close buttons"]]
+];
+function openRelease(){
+  let d=document.getElementById("devpage"); if(d&&d.dataset.k!=="rel"){d.remove();d=null}
+  if(!d){
+    d=document.createElement("div"); d.id="devpage"; d.dataset.k="rel"; d.tabIndex=-1;
+    d.innerHTML='<div class="dbar"><b>Release Notes: '+RELEASES[0][0]+'</b><span class="sp"></span><button class="vbtn sec2" id="devClose">✕ Close</button></div><div class="wrap"><div class="hero"><div><h1>CodePulse Release Notes</h1><div class="sub">Welcome to vr.'+RELEASES[0][0]+' — here is what changed in each version.</div></div></div>'+
+      RELEASES.map((r,i)=>'<div class="card"><h2>vr.'+r[0]+(i?"":' <span class="tag" style="margin-left:6px">Latest</span>')+(r[1]?' <span style="color:var(--fg-muted);font-weight:400;font-size:12px;margin-left:6px">'+r[1]+'</span>':"")+'</h2><ul>'+r[2].map(x=>"<li>"+x+"</li>").join("")+'</ul></div>').join("")+'</div>';
+    document.body.appendChild(d);
+    d.querySelector("#devClose").onclick=()=>d.classList.remove("show");
+    d.addEventListener("keydown",e=>{ e.stopPropagation(); if(e.key==="Escape") d.classList.remove("show") });
+  }
+  d.classList.add("show"); d.focus();
+}
+ACT.releasenotes=openRelease;
+defCmd("diff","Source Control: Open Changes (Diff vs HEAD)","",diffActive);
 MENUS.forEach(([n,items])=>items.forEach(it=>{if(it)defCmd(it[2],`${n}: ${it[0].replace(/\.\.\.$/,"")}`,it[1],ACT[it[2]])}));
 defCmd("clearout","Output: Clear Output","",ACT.clearout);
 defCmd("rename","File: Rename Active File","F2",()=>ws.active&&renameFile(ws.active));
@@ -2133,6 +2488,8 @@ document.addEventListener("keydown",e=>{
   else if(e.altKey&&e.key==="PageDown"){e.preventDefault();cycleTab(1)}
   else if(e.altKey&&e.key==="PageUp"){e.preventDefault();cycleTab(-1)}
   else if(mod&&(e.key==="`"||e.code==="Backquote")){e.preventDefault();ACT.newterm()}
+  else if(e.key==="F12"){e.preventDefault();e.shiftKey?goRefs():goDef()}
+  else if(mod&&e.key==="F2"){e.preventDefault();renameSym()}
   else if(e.key==="F11"){e.preventDefault();ACT.fullscreen()}
   else if(e.key==="F2"&&ws.active&&document.activeElement===ta){e.preventDefault();renameFile(ws.active)}
   else if(e.altKey&&k==="n"){e.preventDefault();newFile()}
@@ -2382,7 +2739,7 @@ $("#gitBody").addEventListener("click",e=>{
     else if(a==="discard"){ gitDiscard(p,st); return }
     persist(); renderGit(); return;
   }
-  if(row){ const f=ws.files.find(x=>fpath(x)===row.dataset.p); if(f) openFile(f.id); else toast("This file was deleted"); return }
+  if(row){ const f=ws.files.find(x=>fpath(x)===row.dataset.p), hp=row.dataset.p; if(row.dataset.st==="M"&&f) diffView(f.name+" (HEAD ↔ Working Tree)",gitHead()[hp],f.content,f.id); else if(f) openFile(f.id); else diffView(hp+" (Deleted)",gitHead()[hp],"",null); return }
   if(sec){ const k=sec.dataset.k; gitCol.has(k)?gitCol.delete(k):gitCol.add(k); renderGit() }
 });
 $("#gitBody").addEventListener("keydown",e=>e.stopPropagation());
@@ -2654,7 +3011,7 @@ $("#testRef").addEventListener("click",()=>{renderTest();toast("Tests refreshed"
 /* ---- Manage (gear) menu ---- */
 ACT.manage=function(){
   const r=$("#manageBtn").getBoundingClientRect();
-  showCtx(r.right+4,innerWidth<=700?r.bottom:r.top-8,[["Command Palette…",()=>openQP(">")],["Extensions",()=>showView("extensions")],["Keyboard Shortcuts",()=>ACT.shortcuts()],["Color Theme…",()=>ACT.colortheme()],["Toggle Day / Night",()=>toggleTheme()],["Toggle Zen Mode",()=>toggleZen()],["Judge0 Settings…",()=>judgeSettings()],["About CodePulse",()=>openAbout()]]);
+  showCtx(r.right+4,innerWidth<=700?r.bottom:r.top-8,[["Command Palette…",()=>openQP(">")],["Extensions",()=>showView("extensions")],["Keyboard Shortcuts",()=>ACT.shortcuts()],["Release Notes",()=>openRelease()],["Color Theme…",()=>ACT.colortheme()],["Toggle Day / Night",()=>toggleTheme()],["Toggle Zen Mode",()=>toggleZen()],["Judge0 Settings…",()=>judgeSettings()],["About CodePulse",()=>openAbout()]]);
 };
 document.addEventListener("keydown",e=>{ if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key.toLowerCase()==="x"){ e.preventDefault(); showView("extensions") } });
 /* ---- account (optional profile: name, role, photo, email) ---- */
